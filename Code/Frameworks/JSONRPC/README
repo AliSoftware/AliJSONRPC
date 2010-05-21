@@ -1,0 +1,7 @@
+This Objective-C framework aims to add support to JSON-RPC to your Cocoa projects, so that you can easily call JSON-RPC WebServices from your application and handle the responses.
+
+ - To use the framework, simply drag & drop the "AliJSONRPC Framework" directory in your Xcode Project.
+ - A sample project is available in the "Examples/" directory
+ - For more information, see the doxygen documentation (available as an Xcode DocSet) in "Documentation/"
+ 
+
