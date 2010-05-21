@@ -1,0 +1,5 @@
+This directory contains some reusable Objective-C code:
+ - Objective-C useful categories
+ - Objective-C reusable classes
+ - Objective-C Frameworks or Libraries (or more generally a set of Classes that work together to add a global functionality)
+)

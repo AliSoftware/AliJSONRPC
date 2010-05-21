@@ -1,0 +1,6 @@
+This directory contain some useful additional tools or configuration files to add functionality to your Developer Tools (Xcode, IB, ...):
+ - File and Project Templates
+ - Text Macros
+ - Scripts
+...
+
