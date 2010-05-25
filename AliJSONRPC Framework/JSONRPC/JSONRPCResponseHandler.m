@@ -1,5 +1,5 @@
 //
-//  JSONRPCDeferred.m
+//  JSONRPCResponseHandler.m
 //  JSONRPC
 //
 //  Created by Olivier on 01/05/10.
@@ -24,7 +24,7 @@
 
 @synthesize resultClass = _resultClass;
 
--(void)setDelegate:(id)aDelegate callback:(SEL)callback
+-(void)setDelegate:(id<JSONRPCDelegate>)aDelegate callback:(SEL)callback
 {
 	self.delegate = aDelegate;
 	self.callback = callback;
@@ -32,7 +32,7 @@
 		NSLog(@"%@ warning: %@ does not respond to selector %@",[self class],aDelegate,NSStringFromSelector(callback));
 	}
 }
--(void)setDelegate:(id)aDelegate callback:(SEL)callback resultClass:(Class)cls {
+-(void)setDelegate:(id<JSONRPCDelegate>)aDelegate callback:(SEL)callback resultClass:(Class)cls {
 	[self setDelegate:aDelegate callback:callback];
 	self.resultClass = cls;
 }
@@ -65,16 +65,24 @@
 	}
 	if (cont)
 	{
-		id<JSONRPCErrorHandler> del = self.methodCall.service.delegate;
+		id<JSONRPCDelegate> del = self.methodCall.service.delegate;
 		if (del && [del respondsToSelector:errSel]) {
 			cont = [del methodCall:self.methodCall didFailWithError:error];
 		}
 		(void)cont; // UNUSED AFTER THAT
 	}
+	
+	[_receivedData release];
+	_receivedData = nil;
 }
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
-	if (!self.methodCall.uuid) return; // if it was a notification, no response expected.
+	if (!self.methodCall.uuid) {
+		[_receivedData release];
+		_receivedData = nil;
+
+		return; // if it was a notification, no response expected.
+	}
 	
 	if (!_delegate || [_delegate respondsToSelector:_callbackSelector])
 	{
@@ -83,6 +91,9 @@
 		SBJSON* parser = [[SBJSON alloc] init];
 		id respObj = [parser objectWithString:jsonStr error:&jsonParsingError];
 		[parser release];
+
+		[_receivedData release];
+		_receivedData = nil;
 
 		if (jsonParsingError) {
 			// raise an error regarding JSON Parsing
@@ -99,7 +110,7 @@
 			}
 			if (cont)
 			{
-				id<JSONRPCErrorHandler> del = self.methodCall.service.delegate;
+				id<JSONRPCDelegate> del = self.methodCall.service.delegate;
 				if (del && [del respondsToSelector:errSel]) {
 					cont = [del methodCall:self.methodCall didFailWithError:verboseJsonParsingError];
 				}
@@ -130,7 +141,7 @@
 					}
 					if (cont)
 					{
-						id<JSONRPCErrorHandler> del = self.methodCall.service.delegate;
+						id<JSONRPCDelegate> del = self.methodCall.service.delegate;
 						if (del && [del respondsToSelector:errSel]) {
 							cont = [del methodCall:self.methodCall didFailWithError:error];
 						}
@@ -153,20 +164,26 @@
 														nil]];
 			}
 
-			if (_delegate) {
-				JSONRPCMethodCall* methCall = self.methodCall;
-				NSInvocation* inv = [NSInvocation invocationWithMethodSignature:[_delegate methodSignatureForSelector:_callbackSelector]];
-				[inv setSelector:_callbackSelector];
+			JSONRPCMethodCall* methCall = self.methodCall;
+			NSObject<JSONRPCDelegate>* realDelegate = _delegate ?: methCall.service.delegate;
+			SEL realSel = _callbackSelector ?: @selector(methodCall:didReturn:error:);
+
+			if (realDelegate) {
+				NSInvocation* inv = [NSInvocation invocationWithMethodSignature:[realDelegate methodSignatureForSelector:realSel]];
+				[inv setSelector:realSel];
 				[inv setArgument:&methCall atIndex:2];
 				[inv setArgument:&parsedResult atIndex:3];
 				[inv setArgument:&parsedError atIndex:4];
-				[inv invokeWithTarget:_delegate];
+				[inv invokeWithTarget:realDelegate];
 			} else {
-				[self.methodCall.service methodCall:self.methodCall didReturnResult:parsedResult error:parsedError];
+				NSLog(@"warning: JSONRPCResponseHandler did receive a response but no delegate defined: the response has been ignored"); 
 			}
 		}	
 	} else {
 		[_delegate doesNotRecognizeSelector:_callbackSelector];
+		
+		[_receivedData autorelease];
+		_receivedData = nil;
 	}
 }
 

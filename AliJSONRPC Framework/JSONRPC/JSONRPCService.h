@@ -31,8 +31,15 @@ NSString* const JSONRPCErrorClassNameKey; //!< the key used in NSError's userInf
 /////////////////////////////////////////////////////////////////////////////
 
 //! JSONRPC Error Handler protocol, used on the JSONRPCMethodCall's or JSONRPCService's delegate (see @ref ErrMgmt)
-@protocol JSONRPCErrorHandler <NSObject>
+@protocol JSONRPCDelegate <NSObject>
 @optional
+/** @brief method called upon reception of the result of a JSON-RPC method call,
+ * if no callback defined in the returned JSONRPCResponseHandler to catch the response.
+ * @param methodCall the methodCall that received a response from the WebService
+ * @param result the "result" object returned by the JSON-RPC WebService. (May be nil if the WebService returned an error)
+ * @param error the "error" object returned by the JSON-RPC WebService. (Will be nil if no error)
+ */
+-(void)methodCall:(JSONRPCMethodCall*)methodCall didReturn:(id)result error:(NSError*)error;
 /** @brief Called when an error occurred during the method call. (see @ref ErrMgmt)
  *  @param methodCall the JSONRPCMethodCall that triggered the error
  *  @param error the error that happend
@@ -52,10 +59,10 @@ NSString* const JSONRPCErrorClassNameKey; //!< the key used in NSError's userInf
 @interface JSONRPCService : NSObject {
 	//! @privatesection
 	NSURL* _serviceURL;
-	id<JSONRPCErrorHandler> delegate;
+	NSObject<JSONRPCDelegate>* delegate;
 }
 @property(nonatomic, retain) NSURL* serviceURL; //!< The URL to forward JSONRPC method calls to.
-@property(nonatomic, assign) id<JSONRPCErrorHandler> delegate; //!< Object to handle errors if not handled by JSONRPCResponseHandler#delegate .
+@property(nonatomic, assign) NSObject<JSONRPCDelegate>* delegate; //!< Object to handle errors if not handled by JSONRPCResponseHandler#delegate .
 @property(nonatomic, readonly) id proxy; //!< A proxy object on which you can call any Obj-C message (without any param or with an NSArray as a parameter), and which will be forwarded as a JSONRPC method call.
 
 +(id)serviceWithURL:(NSURL*)url; //!< Commodity constructor @param url the URL of the WebService.
@@ -84,15 +91,6 @@ NSString* const JSONRPCErrorClassNameKey; //!< the key used in NSError's userInf
  * @param params the array of parameters to pass to the method call
  */
 - (void)sendNotificationWithName:(NSString *)methodName parameters:(NSArray*)params;
-/** @brief fallback result handler, if no delegate defined in the returned JSONRPCResponseHandler to catch the respose.
- * The default implementation simply log the response and error using NSLog.
- * @note In a typical implementation, you should always define a delegate and callback in the JSONRPCResponseHandler
- *   to catch the response and make something with it.
- * @param methodCall the methodCall that received a response from the WebService
- * @param result the "result" object returned by the JSON-RPC WebService. (May be nil if the WebService returned an error)
- * @param error the "error" object returned by the JSON-RPC WebService. (Will be nil if no error)
- */
--(void)methodCall:(JSONRPCMethodCall*)methodCall didReturnResult:(id)result error:(NSError*)error;
 @end
 
 

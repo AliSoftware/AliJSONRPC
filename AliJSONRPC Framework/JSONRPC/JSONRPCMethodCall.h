@@ -42,7 +42,7 @@
  * You should never affect this \@property manually.
  * It will be nil upon the JSONRPCMethodCall creation; after the method has been called on a JSONRPCService, it will contain the service used to call the method.
  */
-@property(nonatomic, assign) JSONRPCService* service;
+@property(nonatomic, retain) JSONRPCService* service;
 
 //! Commodity constructor. @see JSONRPCMethodCall#initWithMethodName:parameters:
 +(id)methodCallWithMethodName:(NSString*)methodName parameters:(NSArray*)params;

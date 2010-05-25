@@ -107,6 +107,7 @@ static inline NSString* generateUUID() {
 	[_methodName release];
 	[_parameters release];
 	[_uuid release];
+	[_service release];
 	[super dealloc];
 }
 @end

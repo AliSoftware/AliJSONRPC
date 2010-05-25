@@ -106,9 +106,27 @@
  *
  * <li> To handle the response from the server, use the JSONRPCResponseHandler object returned by the method used to make the call:
  *   <ul>
- *     <li> You can set a delegate and callback to call when the response comes.
- *          The callback should be a \@selector that accept 3 parameters : a JSONRPCMethodCall object, a generic object representing the response, and an NSError.
+ *     <li> If you don't do anything with the JSONRPCResponseHandler (neither set a delegate nor a the callback),
+ *          the method @ref JSONRPCDelegate "methodCall:didReturn:error:" will be called on the JSONRPCService 's delegate.
+ *          If no delegate is set on the JSONRPCService object neither, the response will be ignored.</li>
+ *     <li> If you set the delegate of the JSONRPCResponseHandler object (JSONRPCResponseHandler#delegate:), this object
+ *          will handle the response for this methodCall instead of the JSONRPCService's delegate.
+ *          This is useful if you have a unique JSONRPCService object (e.g. singleton) and call it from multiple places in your project,
+ *          to define different delegate objects depending on the place you call the service from, etc.</li>
+ *     <li> You can also set the callback (\@selector) to call instead of the default @ref JSONRPCDelegate "methodCall:didReturn:error:".
+ *          The callback should be a \@selector that accept 3 parameters : a JSONRPCMethodCall object, a generic object
+ *          representing the response, and an NSError. (as the @ref JSONRPCDelegate "methodCall:didReturn:error:" \@selector).
  *     </li>
+ * 	    @code
+ *        JSONRPCResponseHandler* h = [service callMethodWithName:@"echo" parameters:mkArray(@"Hello there")];
+ *        // (1) If we stop here, the response will be received by the JSONRPCService's delegate method methodCall:didReturn:error:
+ *
+ *        [h setDelegate:x];
+ *        // at this stage, the response will be received by x through the method methodCall:didReturn:error:
+ *
+ *        [h setCallback:@selector(remoteProcedureCall:didReturnObject:serviceError:)];
+ *        // at this stage, the response will be received by x through the method remoteProcedureCall:didReturnObject:serviceError:
+ *	    @endcode
  *     <li> You can also set the Class you want the result to be converted into.
  *       <ul>
  *         <li> This class should respond to initWithJson: to be initialized using the JSON object</li>
@@ -119,20 +137,20 @@
  *       </ul>
  *     </li>
  *   </ul>
- *   @code
- *   JSONRPCResponseHandler* h = [service callMethodWithNameAndParams:@"echo",@"Hello there",nil];
- *   [h setDelegate:self callback:@selector(methodCall:didReturnResult:error:)];
- *   [h setResultClass:[MyCustomClass class]]; // optional, don't write this line if you can't to receive the JSON object directly
- *   @endcode
- *   Or more concisely:
+ *   Note that you can nest tje JSONRPCService method call with the JSONRPCResponseHandler calls to be more concise:
  *   @code
  *   [[service callMethodWithNameAndParams:@"echo",@"Hello there",nil]
- *    setDelegate:self callback:@selector(methodCall:didReturnResult:error) resultClass:[MyCustomClass class]];
+ *    setDelegate:self callback:@selector(methodCall:didReturn:error) resultClass:[MyCustomClass class]];
  *   @endcode
  * </li>
  *
  * <li> Of course don't forget to release your JSONRPCService when you are done. </li>
  * </ol>
+ *
+ * As you can see, the usage of this framework is highly flexible. You can call a JSON-RPC method using multiple different syntaxes,
+ * and you can also receive the response in the way you think it's the best suitable for your project, centralizing the responses on
+ * one object (the JSONRPCService#delegate) or on separate objects (JSONRPCResponseHandler#delegate) and calling a unique \@selector
+ * method for handling the response of all your method calls, or a different \@selector for each.
  *
  * For more information, you can look at the @ref Example.
  */
@@ -147,15 +165,15 @@
  
  * When an internal error occur (network error, JSON parsing error, failed to convert to expected class, ...),
  * the JSONRPCResponseHandler will forward the error in the following order:
- *  - try to call @ref JSONRPCErrorHandler "methodCall:didFailWithError:" on the JSONRPCResponseHandler 's delegate
+ *  - try to call @ref JSONRPCDelegate "methodCall:didFailWithError:" on the JSONRPCResponseHandler 's delegate
  *    (i.e. on the object that expect to receive the response)
- *  - if it does not respond, or respond and return YES, we try to call @ref JSONRPCErrorHandler "methodCall:didFailWithError:"
+ *  - if it does not respond, or respond and return YES, we try to call @ref JSONRPCDelegate "methodCall:didFailWithError:"
  *    on the JSONRPCService 's delegate
  *
- * This way, if you don't implement @ref JSONRPCErrorHandler "methodCall:didFailWithError:" in the delegate object that expect the response,
+ * This way, if you don't implement @ref JSONRPCDelegate "methodCall:didFailWithError:" in the delegate object that expect the response,
  *  it will fall back to the implementation of the JSONRPCService's delegate to handle generic cases (which typically display an alert or something).
  *
- * If you want to catch the error on specific cases, you still can implement @ref JSONRPCErrorHandler "methodCall:didFailWithError:" in the
+ * If you want to catch the error on specific cases, you still can implement @ref JSONRPCDelegate "methodCall:didFailWithError:" in the
  *  JSONRPCResponseHandler's delegate object to catch it. At this point, you can return YES to still execute the default behavior
  *  (the one in your JSONRPCService's delegate implementation) or return NO to avoid forwarding the error.
  *
@@ -186,7 +204,7 @@
  *
  * </ul>
  *
- * @subsection ErrCodes2 Server errors ("methodCall:didReturnResult:error:")
+ * @subsection ErrCodes2 Server errors ("methodCall:didReturn:error:")
  * This section only receive error that comes directly from the WebService you query using JSON-RPC.
  * When the server returned an error in its JSON response, this is obviously a server-dependant error code.
  *

@@ -1,5 +1,5 @@
 //
-//  JSONRPCDeferred.h
+//  JSONRPCResponseHandler.h
 //  JSONRPC
 //
 //  Created by Olivier on 01/05/10.
@@ -12,6 +12,9 @@
 //! @brief Utility object to configure the way to handle the response to a JSON-RPC method call
 
 @class JSONRPCMethodCall;
+@protocol JSONRPCDelegate;
+
+
 
 /** @brief Informal protocol to create an object from a JSON object.
  *
@@ -40,19 +43,26 @@
 	JSONRPCMethodCall* _methodCall;
 	NSMutableData* _receivedData;
 	
-	id _delegate;
+	NSObject<JSONRPCDelegate>* _delegate;
 	SEL _callbackSelector;
 	
 	Class _resultClass; // instances of this class should conform to JSONInitializer
 }
 @property(nonatomic,retain) JSONRPCMethodCall* methodCall; //!< the method call attached with this response handler
-@property(nonatomic,retain) id  delegate; //!< the delegate object on which the callback will be called
-/** the callback (\@selector) to call when receiving the response from the WebService
+/** @brief The delegate object on which the callback will be called.
+ * @note If this delegate is nil (the default), the JSONRPCService#delegate is used instead.
+ */
+@property(nonatomic,retain) NSObject<JSONRPCDelegate>* delegate;
+/** @brief The callback (\@selector) to call when receiving the response from the WebService
+ *
  * This \@selector must take three parameters:
  *  - a JSONRPCMethodCall representing the method call that triggered the response
  *  - a parameter of type 'id' or of a specific class corresponding to the expected response returned by the WebService.
  *    If you define a resultClass on the JSONRPCResponseHandler, the type of this second argument of the \@selector is typically the same class.
  *  - a parameter of type NSError that will hold the error returned by the WebService if any.
+ *
+ * @note This method is called on the JSONRPCResponseHandler#delegate object if set, or on the JSONRPCService#delegate if not.
+ * @note By default, this selector is not set (the default) and the @ref JSONRPCDelegate methodCall:didReturn:error: (JSONRPCDelegate \@protocol) method is called instead.
  */
 @property(nonatomic,assign) SEL callback;
 /** The class to convert the received object to, if wanted.
@@ -66,10 +76,10 @@
 @property(nonatomic,assign) Class resultClass;
 
 /** @brief set both the delegate and the callback to call upon receiving the WebService's response
- * @param target the delegate object that will receive the message (on which the callback will be called)
+ * @param aDelegate the delegate object that will receive the message (on which the callback will be called)
  * @param callback the \@selector to call (the message to send onto the delegate)
  */
--(void)setDelegate:(id)target callback:(SEL)callback;
+-(void)setDelegate:(id<JSONRPCDelegate>)aDelegate callback:(SEL)callback;
 /** @brief set both the delegate, the callback and the resultClass at once.
  * @param aDelegate the delegate object that will receive the message (on which the callback will be called)
  * @param callback the \@selector to call (the message to send onto the delegate)
@@ -78,6 +88,6 @@
  *       (JSONRPCService#callMethod or similar), as doing it that way you avoid the need to declare a temporary JSONRPCResponseHandler
  *       @code [[service callMethod:xxx] setDelegate:d callback:@selector(methodCall:didReturn:error:) resultClass:[MyCustomObject class]] @endcode
  */
--(void)setDelegate:(id)aDelegate callback:(SEL)callback resultClass:(Class)cls;
+-(void)setDelegate:(id<JSONRPCDelegate>)aDelegate callback:(SEL)callback resultClass:(Class)cls;
 @end
 

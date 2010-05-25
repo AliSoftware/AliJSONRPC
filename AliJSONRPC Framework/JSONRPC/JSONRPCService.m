@@ -108,16 +108,6 @@ NSInteger const JSONRPCConversionErrorCode = 10;
 
 
 
-
-/////////////////////////////////////////////////////////////////////////////
-// MARK: -
-// MARK: JSONRPCMethodCall Fallback Result Handler
-/////////////////////////////////////////////////////////////////////////////
--(void)methodCall:(JSONRPCMethodCall*)methodCall didReturnResult:(id)result error:(NSError*)error {
-	// fallback if no delegate defined in JSONRPCResponseHandler
-	NSLog(@"method call %@ did return result:%@ error:%@",methodCall,result,error);
-}
-
 @end
 
 
