@@ -54,8 +54,6 @@ Inheritance diagram for JSONRPCService:</div>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Commodity method to call a JSON-RPC method on the WebService.  <a href="#ad5c6e7abfbbdfc73e32f7461677965b5"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">(void)&nbsp;</td><td class="memItemRight" valign="bottom">- <a class="el" href="interface_j_s_o_n_r_p_c_service.html#aa579dfb1e380e8506f0aa27db31d268d">sendNotificationWithName:parameters:</a></td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Commodity method to send a JSON-RPC notification on the WebService.  <a href="#aa579dfb1e380e8506f0aa27db31d268d"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">(void)&nbsp;</td><td class="memItemRight" valign="bottom">- <a class="el" href="interface_j_s_o_n_r_p_c_service.html#af6fd37b03bded17d7aa17cd74e960ada">methodCall:didReturnResult:error:</a></td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">fallback result handler, if no delegate defined in the returned <a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html" title="an intermediate object returned by the JSONRPCService when you call a method, to...">JSONRPCResponseHandler</a> to catch the respose. The default implementation simply log the response and error using NSLog.  <a href="#af6fd37b03bded17d7aa17cd74e960ada"></a><br/></td></tr>
 <tr><td colspan="2"><h2>Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">(id)&nbsp;</td><td class="memItemRight" valign="bottom">+ <a class="el" href="interface_j_s_o_n_r_p_c_service.html#a899b4ccc5577290ab174465eb28594bd">serviceWithURL:</a></td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Commodity constructor.  <a href="#a899b4ccc5577290ab174465eb28594bd"></a><br/></td></tr>
@@ -63,9 +61,9 @@ Inheritance diagram for JSONRPCService:</div>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abd1c65b4702f683cb3cbadcb7d3a5778"></a><!-- doxytag: member="JSONRPCService::serviceURL" ref="abd1c65b4702f683cb3cbadcb7d3a5778" args="" -->
 NSURL *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_j_s_o_n_r_p_c_service.html#abd1c65b4702f683cb3cbadcb7d3a5778">serviceURL</a></td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">The URL to forward JSONRPC method calls to. <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad83c90d1006d5b56c26005c7e63baf37"></a><!-- doxytag: member="JSONRPCService::delegate" ref="ad83c90d1006d5b56c26005c7e63baf37" args="" -->
-id&lt; <a class="el" href="protocol_j_s_o_n_r_p_c_error_handler-p.html">JSONRPCErrorHandler</a> &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_j_s_o_n_r_p_c_service.html#ad83c90d1006d5b56c26005c7e63baf37">delegate</a></td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Object to handle errors if not handled by <a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html#a091e657d3b7c3458f3fd961cb249b6b1" title="the delegate object on which the callback will be called">JSONRPCResponseHandler::delegate</a> . <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad5361d24af5c0e36868d423320f18ae1"></a><!-- doxytag: member="JSONRPCService::delegate" ref="ad5361d24af5c0e36868d423320f18ae1" args="" -->
+NSObject&lt; <a class="el" href="protocol_j_s_o_n_r_p_c_delegate-p.html">JSONRPCDelegate</a> &gt; *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_j_s_o_n_r_p_c_service.html#ad5361d24af5c0e36868d423320f18ae1">delegate</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Object to handle errors if not handled by <a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html#a8b58e7b4c93462c5192f734c576334a8" title="The delegate object on which the callback will be called.">JSONRPCResponseHandler::delegate</a> . <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a10d83b3d133196f7476d83fc12dfefe6"></a><!-- doxytag: member="JSONRPCService::proxy" ref="a10d83b3d133196f7476d83fc12dfefe6" args="" -->
 id&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_j_s_o_n_r_p_c_service.html#a10d83b3d133196f7476d83fc12dfefe6">proxy</a></td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">A proxy object on which you can call any Obj-C message (without any param or with an NSArray as a parameter), and which will be forwarded as a JSONRPC method call. <br/></td></tr>
@@ -200,50 +198,6 @@ id&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interf
 
 </div>
 </div>
-<a class="anchor" id="af6fd37b03bded17d7aa17cd74e960ada"></a><!-- doxytag: member="JSONRPCService::methodCall:didReturnResult:error:" ref="af6fd37b03bded17d7aa17cd74e960ada" args="(JSONRPCMethodCall *methodCall,[didReturnResult] id result,[error] NSError *error)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">- (void) methodCall: </td>
-          <td></td>
-          <td class="paramtype">(<a class="el" href="interface_j_s_o_n_r_p_c_method_call.html">JSONRPCMethodCall</a>*)&nbsp;</td>
-          <td class="paramname"> <em>methodCall</em></td>
-        </tr>
-        <tr>
-          <td class="paramkey">didReturnResult:</td>
-          <td></td>
-          <td class="paramtype">(id)&nbsp;</td>
-          <td class="paramname"> <em>result</em></td>
-        </tr>
-        <tr>
-          <td class="paramkey">error:</td>
-          <td></td>
-          <td class="paramtype">(NSError*)&nbsp;</td>
-          <td class="paramname"> <em>error</em></td><td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td></td><td></td><td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>fallback result handler, if no delegate defined in the returned <a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html" title="an intermediate object returned by the JSONRPCService when you call a method, to...">JSONRPCResponseHandler</a> to catch the respose. The default implementation simply log the response and error using NSLog. </p>
-<dl class="note"><dt><b>Note:</b></dt><dd>In a typical implementation, you should always define a delegate and callback in the <a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html" title="an intermediate object returned by the JSONRPCService when you call a method, to...">JSONRPCResponseHandler</a> to catch the response and make something with it. </dd></dl>
-<dl><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>methodCall</em>&nbsp;</td><td>the methodCall that received a response from the WebService </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>result</em>&nbsp;</td><td>the "result" object returned by the JSON-RPC WebService. (May be nil if the WebService returned an error) </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>error</em>&nbsp;</td><td>the "error" object returned by the JSON-RPC WebService. (Will be nil if no error) </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
 <a class="anchor" id="aa579dfb1e380e8506f0aa27db31d268d"></a><!-- doxytag: member="JSONRPCService::sendNotificationWithName:parameters:" ref="aa579dfb1e380e8506f0aa27db31d268d" args="(NSString *methodName,[parameters] NSArray *params)" -->
 <div class="memitem">
 <div class="memproto">
@@ -307,12 +261,8 @@ id&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interf
 
 </div>
 </div>
-<hr/>The documentation for this class was generated from the following files:<ul>
-<li>/Users/olivier/Documents/Programmation/iPhone/_Ressources_/AliSoftware/code/JSONRPC/AliJSONRPC Framework/JSONRPC/<a class="el" href="_j_s_o_n_r_p_c_service_8h_source.html">JSONRPCService.h</a></li>
-<li>/Users/olivier/Documents/Programmation/iPhone/_Ressources_/AliSoftware/code/JSONRPC/AliJSONRPC Framework/JSONRPC/JSONRPCService.m</li>
-</ul>
 </div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Fri May 21 20:32:25 2010 for JSONRPC Framework by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Wed May 26 00:30:31 2010 for JSONRPC Framework by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

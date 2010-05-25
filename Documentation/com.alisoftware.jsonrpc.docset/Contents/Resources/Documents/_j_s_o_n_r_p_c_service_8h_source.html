@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<title>JSONRPC Framework: /Users/olivier/Documents/Programmation/iPhone/_Ressources_/AliSoftware/code/JSONRPC/AliJSONRPC Framework/JSONRPC/JSONRPCService.h Source File</title>
+<title>JSONRPC Framework: /Users/olivier/Documents/Programmation/iPhone/_Ressources_/AliJSONRPC/AliJSONRPC Framework/JSONRPC/JSONRPCService.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -22,7 +22,7 @@
       <li><a href="globals.html"><span>File&nbsp;Members</span></a></li>
     </ul>
   </div>
-<h1>/Users/olivier/Documents/Programmation/iPhone/_Ressources_/AliSoftware/code/JSONRPC/AliJSONRPC Framework/JSONRPC/JSONRPCService.h</h1><a href="_j_s_o_n_r_p_c_service_8h.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">//</span>
+<h1>/Users/olivier/Documents/Programmation/iPhone/_Ressources_/AliJSONRPC/AliJSONRPC Framework/JSONRPC/JSONRPCService.h</h1><a href="_j_s_o_n_r_p_c_service_8h.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">//</span>
 <a name="l00002"></a>00002 <span class="comment">//  JSONRPCService.h</span>
 <a name="l00003"></a>00003 <span class="comment">//  JSONRPC</span>
 <a name="l00004"></a>00004 <span class="comment">//</span>
@@ -50,60 +50,60 @@
 <a name="l00029"></a>00029 <span class="comment">// MARK: -</span>
 <a name="l00030"></a>00030 <span class="comment">// MARK: Error Handling</span>
 <a name="l00032"></a>00032 <span class="comment"></span>
-<a name="l00034"></a><a class="code" href="protocol_j_s_o_n_r_p_c_error_handler-p.html">00034</a> <span class="keyword">@protocol </span>JSONRPCErrorHandler &lt;NSObject&gt;
+<a name="l00034"></a><a class="code" href="protocol_j_s_o_n_r_p_c_delegate-p.html">00034</a> <span class="keyword">@protocol </span>JSONRPCDelegate &lt;NSObject&gt;
 <a name="l00035"></a>00035 <span class="keyword">@optional</span>
-<a name="l00041"></a>00041 -(BOOL)methodCall:(<a class="code" href="interface_j_s_o_n_r_p_c_method_call.html" title="This class represent a method call on a JSON-RPC WebService.">JSONRPCMethodCall</a>*)methodCall didFailWithError:(NSError*)error;
-<a name="l00042"></a>00042 <span class="keyword">@end</span>
-<a name="l00043"></a>00043 
-<a name="l00044"></a>00044 
-<a name="l00045"></a>00045 
-<a name="l00047"></a>00047 <span class="comment">// MARK: -</span>
-<a name="l00048"></a>00048 <span class="comment">// MARK: JSON-RPC v1.0</span>
-<a name="l00050"></a>00050 <span class="comment"></span>
-<a name="l00052"></a><a class="code" href="interface_j_s_o_n_r_p_c_service.html">00052</a> <span class="keyword">@interface </span><a class="code" href="interface_j_s_o_n_r_p_c_service.html" title="The class representing a JSON-RPC WebService (identified by an URL to call methods...">JSONRPCService</a> : NSObject {
-<a name="l00054"></a>00054         NSURL* _serviceURL;
-<a name="l00055"></a><a class="code" href="interface_j_s_o_n_r_p_c_service.html#ad83c90d1006d5b56c26005c7e63baf37">00055</a>         id&lt;JSONRPCErrorHandler&gt; <a class="code" href="interface_j_s_o_n_r_p_c_service.html#ad83c90d1006d5b56c26005c7e63baf37" title="Object to handle errors if not handled by JSONRPCResponseHandler::delegate .">delegate</a>;
-<a name="l00056"></a>00056 }
-<a name="l00057"></a><a class="code" href="interface_j_s_o_n_r_p_c_service.html#abd1c65b4702f683cb3cbadcb7d3a5778">00057</a> @property(nonatomic, retain) NSURL* serviceURL; 
-<a name="l00058"></a>00058 @property(nonatomic, assign) <span class="keywordtype">id</span>&lt;JSONRPCErrorHandler&gt; delegate; 
-<a name="l00059"></a><a class="code" href="interface_j_s_o_n_r_p_c_service.html#a10d83b3d133196f7476d83fc12dfefe6">00059</a> @property(nonatomic, readonly) <span class="keywordtype">id</span> proxy; 
-<a name="l00060"></a>00060 
-<a name="l00061"></a>00061 +(<span class="keywordtype">id</span>)serviceWithURL:(NSURL*)url; 
-<a name="l00062"></a>00062 -(<span class="keywordtype">id</span>)initWithURL:(NSURL*)url; 
-<a name="l00063"></a>00063 
-<a name="l00068"></a>00068 - (<a class="code" href="interface_j_s_o_n_r_p_c_response_handler.html" title="an intermediate object returned by the JSONRPCService when you call a method, to...">JSONRPCResponseHandler</a>*)callMethod:(<a class="code" href="interface_j_s_o_n_r_p_c_method_call.html" title="This class represent a method call on a JSON-RPC WebService.">JSONRPCMethodCall</a>*)methodCall;
-<a name="l00074"></a>00074 - (<a class="code" href="interface_j_s_o_n_r_p_c_response_handler.html" title="an intermediate object returned by the JSONRPCService when you call a method, to...">JSONRPCResponseHandler</a>*)callMethodWithName:(NSString *)methodName parameters:(NSArray*)params;
-<a name="l00080"></a>00080 - (<a class="code" href="interface_j_s_o_n_r_p_c_response_handler.html" title="an intermediate object returned by the JSONRPCService when you call a method, to...">JSONRPCResponseHandler</a>*)callMethodWithNameAndParams:(NSString *)methodName, ... NS_REQUIRES_NIL_TERMINATION;
-<a name="l00086"></a>00086 - (<span class="keywordtype">void</span>)sendNotificationWithName:(NSString *)methodName parameters:(NSArray*)params;
-<a name="l00095"></a>00095 -(<span class="keywordtype">void</span>)methodCall:(<a class="code" href="interface_j_s_o_n_r_p_c_method_call.html" title="This class represent a method call on a JSON-RPC WebService.">JSONRPCMethodCall</a>*)methodCall didReturnResult:(<span class="keywordtype">id</span>)result error:(NSError*)error;
-<a name="l00096"></a>00096 @end
+<a name="l00042"></a>00042 -(void)methodCall:(<a class="code" href="interface_j_s_o_n_r_p_c_method_call.html" title="This class represent a method call on a JSON-RPC WebService.">JSONRPCMethodCall</a>*)methodCall didReturn:(<span class="keywordtype">id</span>)result error:(NSError*)error;
+<a name="l00048"></a>00048 -(BOOL)methodCall:(<a class="code" href="interface_j_s_o_n_r_p_c_method_call.html" title="This class represent a method call on a JSON-RPC WebService.">JSONRPCMethodCall</a>*)methodCall didFailWithError:(NSError*)error;
+<a name="l00049"></a>00049 <span class="keyword">@end</span>
+<a name="l00050"></a>00050 
+<a name="l00051"></a>00051 
+<a name="l00052"></a>00052 
+<a name="l00054"></a>00054 <span class="comment">// MARK: -</span>
+<a name="l00055"></a>00055 <span class="comment">// MARK: JSON-RPC v1.0</span>
+<a name="l00057"></a>00057 <span class="comment"></span>
+<a name="l00059"></a><a class="code" href="interface_j_s_o_n_r_p_c_service.html">00059</a> <span class="keyword">@interface </span><a class="code" href="interface_j_s_o_n_r_p_c_service.html" title="The class representing a JSON-RPC WebService (identified by an URL to call methods...">JSONRPCService</a> : NSObject {
+<a name="l00061"></a>00061         NSURL* _serviceURL;
+<a name="l00062"></a><a class="code" href="interface_j_s_o_n_r_p_c_service.html#ad5361d24af5c0e36868d423320f18ae1">00062</a>         NSObject&lt;JSONRPCDelegate&gt;* <a class="code" href="interface_j_s_o_n_r_p_c_service.html#ad5361d24af5c0e36868d423320f18ae1" title="Object to handle errors if not handled by JSONRPCResponseHandler::delegate .">delegate</a>;
+<a name="l00063"></a>00063 }
+<a name="l00064"></a><a class="code" href="interface_j_s_o_n_r_p_c_service.html#abd1c65b4702f683cb3cbadcb7d3a5778">00064</a> @property(nonatomic, retain) NSURL* serviceURL; 
+<a name="l00065"></a>00065 @property(nonatomic, assign) NSObject&lt;JSONRPCDelegate&gt;* delegate; 
+<a name="l00066"></a><a class="code" href="interface_j_s_o_n_r_p_c_service.html#a10d83b3d133196f7476d83fc12dfefe6">00066</a> @property(nonatomic, readonly) <span class="keywordtype">id</span> proxy; 
+<a name="l00067"></a>00067 
+<a name="l00068"></a>00068 +(<span class="keywordtype">id</span>)serviceWithURL:(NSURL*)url; 
+<a name="l00069"></a>00069 -(<span class="keywordtype">id</span>)initWithURL:(NSURL*)url; 
+<a name="l00070"></a>00070 
+<a name="l00075"></a>00075 - (<a class="code" href="interface_j_s_o_n_r_p_c_response_handler.html" title="an intermediate object returned by the JSONRPCService when you call a method, to...">JSONRPCResponseHandler</a>*)callMethod:(<a class="code" href="interface_j_s_o_n_r_p_c_method_call.html" title="This class represent a method call on a JSON-RPC WebService.">JSONRPCMethodCall</a>*)methodCall;
+<a name="l00081"></a>00081 - (<a class="code" href="interface_j_s_o_n_r_p_c_response_handler.html" title="an intermediate object returned by the JSONRPCService when you call a method, to...">JSONRPCResponseHandler</a>*)callMethodWithName:(NSString *)methodName parameters:(NSArray*)params;
+<a name="l00087"></a>00087 - (<a class="code" href="interface_j_s_o_n_r_p_c_response_handler.html" title="an intermediate object returned by the JSONRPCService when you call a method, to...">JSONRPCResponseHandler</a>*)callMethodWithNameAndParams:(NSString *)methodName, ... NS_REQUIRES_NIL_TERMINATION;
+<a name="l00093"></a>00093 - (<span class="keywordtype">void</span>)sendNotificationWithName:(NSString *)methodName parameters:(NSArray*)params;
+<a name="l00094"></a>00094 @end
+<a name="l00095"></a>00095 
+<a name="l00096"></a>00096 
 <a name="l00097"></a>00097 
-<a name="l00098"></a>00098 
-<a name="l00099"></a>00099 
-<a name="l00101"></a>00101 <span class="comment">// MARK: -</span>
-<a name="l00102"></a>00102 <span class="comment">// MARK: JSON-RPC v2.0</span>
-<a name="l00104"></a>00104 <span class="comment"></span>
-<a name="l00106"></a><a class="code" href="interface_j_s_o_n_r_p_c_service__v2__0.html">00106</a> @interface <a class="code" href="interface_j_s_o_n_r_p_c_service__v2__0.html" title="This class is a subclass of JSONRPCService that handle JSON-RPC v2.0 services.">JSONRPCService_v2_0</a> : <a class="code" href="interface_j_s_o_n_r_p_c_service.html" title="The class representing a JSON-RPC WebService (identified by an URL to call methods...">JSONRPCService</a>
-<a name="l00112"></a>00112 - (<a class="code" href="interface_j_s_o_n_r_p_c_response_handler.html" title="an intermediate object returned by the JSONRPCService when you call a method, to...">JSONRPCResponseHandler</a>*)callMethodWithName:(NSString *)methodName namedParameters:(NSDictionary*)params;
-<a name="l00120"></a>00120 - (<a class="code" href="interface_j_s_o_n_r_p_c_response_handler.html" title="an intermediate object returned by the JSONRPCService when you call a method, to...">JSONRPCResponseHandler</a>*)callMethodWithNameAndNamedParams:(NSString *)methodName, ... NS_REQUIRES_NIL_TERMINATION;
-<a name="l00126"></a>00126 - (<span class="keywordtype">void</span>)sendNotificationWithName:(NSString *)methodName namedParameters:(NSDictionary*)params;
-<a name="l00127"></a>00127 @end
+<a name="l00099"></a>00099 <span class="comment">// MARK: -</span>
+<a name="l00100"></a>00100 <span class="comment">// MARK: JSON-RPC v2.0</span>
+<a name="l00102"></a>00102 <span class="comment"></span>
+<a name="l00104"></a><a class="code" href="interface_j_s_o_n_r_p_c_service__v2__0.html">00104</a> @interface <a class="code" href="interface_j_s_o_n_r_p_c_service__v2__0.html" title="This class is a subclass of JSONRPCService that handle JSON-RPC v2.0 services.">JSONRPCService_v2_0</a> : <a class="code" href="interface_j_s_o_n_r_p_c_service.html" title="The class representing a JSON-RPC WebService (identified by an URL to call methods...">JSONRPCService</a>
+<a name="l00110"></a>00110 - (<a class="code" href="interface_j_s_o_n_r_p_c_response_handler.html" title="an intermediate object returned by the JSONRPCService when you call a method, to...">JSONRPCResponseHandler</a>*)callMethodWithName:(NSString *)methodName namedParameters:(NSDictionary*)params;
+<a name="l00118"></a>00118 - (<a class="code" href="interface_j_s_o_n_r_p_c_response_handler.html" title="an intermediate object returned by the JSONRPCService when you call a method, to...">JSONRPCResponseHandler</a>*)callMethodWithNameAndNamedParams:(NSString *)methodName, ... NS_REQUIRES_NIL_TERMINATION;
+<a name="l00124"></a>00124 - (<span class="keywordtype">void</span>)sendNotificationWithName:(NSString *)methodName namedParameters:(NSDictionary*)params;
+<a name="l00125"></a>00125 @end
+<a name="l00126"></a>00126 
+<a name="l00127"></a>00127 
 <a name="l00128"></a>00128 
 <a name="l00129"></a>00129 
-<a name="l00130"></a>00130 
-<a name="l00131"></a>00131 
-<a name="l00133"></a>00133 <span class="comment">// MARK: -</span>
-<a name="l00134"></a>00134 <span class="comment">// MARK: JSONRPC Service Proxy</span>
-<a name="l00136"></a>00136 <span class="comment"></span>
-<a name="l00151"></a><a class="code" href="interface_j_s_o_n_r_p_c_service_proxy.html">00151</a> @interface <a class="code" href="interface_j_s_o_n_r_p_c_service_proxy.html" title="Proxy object which allow you to call JSON-RPC methods as if it was Obj-C method.">JSONRPCServiceProxy</a> : NSProxy
-<a name="l00152"></a>00152 {
-<a name="l00154"></a>00154         <a class="code" href="interface_j_s_o_n_r_p_c_service.html" title="The class representing a JSON-RPC WebService (identified by an URL to call methods...">JSONRPCService</a>* _service;
-<a name="l00155"></a>00155 }
-<a name="l00156"></a><a class="code" href="interface_j_s_o_n_r_p_c_service_proxy.html#ac5fe5afa1fdca030a06e6d29d7496672">00156</a> @property(nonatomic, assign) <a class="code" href="interface_j_s_o_n_r_p_c_service.html" title="The class representing a JSON-RPC WebService (identified by an URL to call methods...">JSONRPCService</a>* service; 
-<a name="l00157"></a>00157 -(<span class="keywordtype">id</span>)initWithService:(<a class="code" href="interface_j_s_o_n_r_p_c_service.html" title="The class representing a JSON-RPC WebService (identified by an URL to call methods...">JSONRPCService</a>*)service; 
-<a name="l00158"></a>00158 @end
+<a name="l00131"></a>00131 <span class="comment">// MARK: -</span>
+<a name="l00132"></a>00132 <span class="comment">// MARK: JSONRPC Service Proxy</span>
+<a name="l00134"></a>00134 <span class="comment"></span>
+<a name="l00149"></a><a class="code" href="interface_j_s_o_n_r_p_c_service_proxy.html">00149</a> @interface <a class="code" href="interface_j_s_o_n_r_p_c_service_proxy.html" title="Proxy object which allow you to call JSON-RPC methods as if it was Obj-C method.">JSONRPCServiceProxy</a> : NSProxy
+<a name="l00150"></a>00150 {
+<a name="l00152"></a>00152         <a class="code" href="interface_j_s_o_n_r_p_c_service.html" title="The class representing a JSON-RPC WebService (identified by an URL to call methods...">JSONRPCService</a>* _service;
+<a name="l00153"></a>00153 }
+<a name="l00154"></a><a class="code" href="interface_j_s_o_n_r_p_c_service_proxy.html#ac5fe5afa1fdca030a06e6d29d7496672">00154</a> @property(nonatomic, assign) <a class="code" href="interface_j_s_o_n_r_p_c_service.html" title="The class representing a JSON-RPC WebService (identified by an URL to call methods...">JSONRPCService</a>* service; 
+<a name="l00155"></a>00155 -(<span class="keywordtype">id</span>)initWithService:(<a class="code" href="interface_j_s_o_n_r_p_c_service.html" title="The class representing a JSON-RPC WebService (identified by an URL to call methods...">JSONRPCService</a>*)service; 
+<a name="l00156"></a>00156 @end
 </pre></div></div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Fri May 21 20:32:25 2010 for JSONRPC Framework by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Wed May 26 00:30:31 2010 for JSONRPC Framework by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

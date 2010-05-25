@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "JSONRPC.h"
 
-@interface JSONRPCExample_AppDelegate : NSObject <UIApplicationDelegate> {
+@interface JSONRPCExample_AppDelegate : NSObject <UIApplicationDelegate, JSONRPCDelegate> {
     UIWindow *window;
 	IBOutlet UITextView* logView;
 }
@@ -19,5 +20,6 @@
 -(IBAction)getCoupleDemo;
 -(IBAction)addTwoValuesDemo;
 -(IBAction)sumValuesDemo;
+-(IBAction)echoMethodDemo;
 @end
 

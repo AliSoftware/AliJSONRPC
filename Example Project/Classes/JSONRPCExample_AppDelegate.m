@@ -45,8 +45,22 @@
 	NSLog(@"%@ result:%d error:%@",mc,[result intValue],err);
 	logView.text = [NSString stringWithFormat:@"sum of %@ = %d",mc.parameters,[result intValue]];
 }
-
-
+-(IBAction)echoMethodDemo {
+	JSONRPCService* s = [JSONRPCService serviceWithURL:[NSURL URLWithString:@"http://www.raboof.com/Projects/Jayrock/Demo.ashx"]];
+	s.delegate = self; // we are using the JSONRPCService's delegate here, not the one in JSONRPCResponseHandler.
+	[s callMethodWithNameAndParams:@"echo",@"Hello",nil];
+	// the response will be handled in the current object (as s.delegate = self)
+	// in the "methodCall:didReturn:error:" method (as we will not override the "callback" of the JSONRPCResponseHandler,
+	// the default method defined in the JSONRPCDelegate @protocol will be called)
+}
+-(void)methodCall:(JSONRPCMethodCall *)mc didReturn:(id)result error:(NSError *)error {
+	if ([mc.methodName isEqualToString:@"echo"])
+	{
+		logView.text = [NSString stringWithFormat:@"echo method did return: %@ (error: %@)",result,error];
+	} else {
+		logView.text = [NSString stringWithFormat:@"JSON-RPC response received for a unexpected method (%@)",mc.methodName];
+	}
+}
 
 
 - (void)dealloc {

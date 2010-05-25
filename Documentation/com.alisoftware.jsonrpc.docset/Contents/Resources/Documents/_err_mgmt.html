@@ -28,11 +28,11 @@ Catching Errors</a></h2>
 Internal errors</a></h3>
 <p>When an internal error occur (network error, JSON parsing error, failed to convert to expected class, ...), the <a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html" title="an intermediate object returned by the JSONRPCService when you call a method, to...">JSONRPCResponseHandler</a> will forward the error in the following order:</p>
 <ul>
-<li>try to call <a class="el" href="protocol_j_s_o_n_r_p_c_error_handler-p.html">methodCall:didFailWithError:</a> on the <a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html" title="an intermediate object returned by the JSONRPCService when you call a method, to...">JSONRPCResponseHandler</a> 's delegate (i.e. on the object that expect to receive the response)</li>
-<li>if it does not respond, or respond and return YES, we try to call <a class="el" href="protocol_j_s_o_n_r_p_c_error_handler-p.html">methodCall:didFailWithError:</a> on the <a class="el" href="interface_j_s_o_n_r_p_c_service.html" title="The class representing a JSON-RPC WebService (identified by an URL to call methods...">JSONRPCService</a> 's delegate</li>
+<li>try to call <a class="el" href="protocol_j_s_o_n_r_p_c_delegate-p.html">methodCall:didFailWithError:</a> on the <a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html" title="an intermediate object returned by the JSONRPCService when you call a method, to...">JSONRPCResponseHandler</a> 's delegate (i.e. on the object that expect to receive the response)</li>
+<li>if it does not respond, or respond and return YES, we try to call <a class="el" href="protocol_j_s_o_n_r_p_c_delegate-p.html">methodCall:didFailWithError:</a> on the <a class="el" href="interface_j_s_o_n_r_p_c_service.html" title="The class representing a JSON-RPC WebService (identified by an URL to call methods...">JSONRPCService</a> 's delegate</li>
 </ul>
-<p>This way, if you don't implement <a class="el" href="protocol_j_s_o_n_r_p_c_error_handler-p.html">methodCall:didFailWithError:</a> in the delegate object that expect the response, it will fall back to the implementation of the JSONRPCService's delegate to handle generic cases (which typically display an alert or something).</p>
-<p>If you want to catch the error on specific cases, you still can implement <a class="el" href="protocol_j_s_o_n_r_p_c_error_handler-p.html">methodCall:didFailWithError:</a> in the JSONRPCResponseHandler's delegate object to catch it. At this point, you can return YES to still execute the default behavior (the one in your JSONRPCService's delegate implementation) or return NO to avoid forwarding the error.</p>
+<p>This way, if you don't implement <a class="el" href="protocol_j_s_o_n_r_p_c_delegate-p.html">methodCall:didFailWithError:</a> in the delegate object that expect the response, it will fall back to the implementation of the JSONRPCService's delegate to handle generic cases (which typically display an alert or something).</p>
+<p>If you want to catch the error on specific cases, you still can implement <a class="el" href="protocol_j_s_o_n_r_p_c_delegate-p.html">methodCall:didFailWithError:</a> in the JSONRPCResponseHandler's delegate object to catch it. At this point, you can return YES to still execute the default behavior (the one in your JSONRPCService's delegate implementation) or return NO to avoid forwarding the error.</p>
 <h3><a class="anchor" id="ErrCatch2">
 Server errors</a></h3>
 <p>For error returned by the server (a JSON is received but it contains an "error" object), indicating something went wrong in the server (unknown method name, bad parameters, method-specific errors, ...), this object is simply passed as an NSError in the third parameter of the JSONRPCResponseHandler's delegate callback.</p>
@@ -68,7 +68,7 @@ key JSONRPCErrorClassNameKey : the name of the class we tried to convert to </li
 </li>
 </ul>
 <h3><a class="anchor" id="ErrCodes2">
-Server errors ("methodCall:didReturnResult:error:")</a></h3>
+Server errors ("methodCall:didReturn:error:")</a></h3>
 <p>This section only receive error that comes directly from the WebService you query using JSON-RPC. When the server returned an error in its JSON response, this is obviously a server-dependant error code.</p>
 <ul>
 <li>The Domain for those errors is JSONRPCServerErrorDomain</li>
@@ -81,7 +81,7 @@ Server errors ("methodCall:didReturnResult:error:")</a></h3>
  }
 </pre></div> </dd></dl>
 </div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Fri May 21 20:32:25 2010 for JSONRPC Framework by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Wed May 26 00:30:31 2010 for JSONRPC Framework by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

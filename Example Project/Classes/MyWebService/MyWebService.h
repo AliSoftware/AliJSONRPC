@@ -11,7 +11,7 @@
 #import "JSONRPC.h"
 #import "MyTypes.h"
 
-@interface MyWebService : NSObject <JSONRPCErrorHandler> {
+@interface MyWebService : NSObject <JSONRPCDelegate> {
 	JSONRPCService* service;
 }
 + (MyWebService*)defaultService;
