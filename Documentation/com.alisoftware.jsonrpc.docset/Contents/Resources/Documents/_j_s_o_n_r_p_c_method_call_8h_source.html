@@ -22,73 +22,94 @@
       <li><a href="globals.html"><span>File&nbsp;Members</span></a></li>
     </ul>
   </div>
-<h1>/Users/olivier/Documents/Programmation/iPhone/_Ressources_/AliJSONRPC/AliJSONRPC Framework/JSONRPC/JSONRPCMethodCall.h</h1><a href="_j_s_o_n_r_p_c_method_call_8h.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">//</span>
-<a name="l00002"></a>00002 <span class="comment">//  JSONRPCMethodCall.h</span>
-<a name="l00003"></a>00003 <span class="comment">//  JSONRPC</span>
-<a name="l00004"></a>00004 <span class="comment">//</span>
-<a name="l00005"></a>00005 <span class="comment">//  Created by Olivier on 01/05/10.</span>
-<a name="l00006"></a>00006 <span class="comment">//  Copyright 2010 AliSoftware. All rights reserved.</span>
-<a name="l00007"></a>00007 <span class="comment">//</span>
-<a name="l00008"></a>00008 
-<a name="l00009"></a>00009 <span class="preprocessor">#import &lt;Foundation/Foundation.h&gt;</span>
-<a name="l00010"></a>00010 
-<a name="l00013"></a>00013 
-<a name="l00014"></a>00014 <span class="keyword">@class</span> <a class="code" href="interface_j_s_o_n_r_p_c_service.html" title="The class representing a JSON-RPC WebService (identified by an URL to call methods...">JSONRPCService</a>;
-<a name="l00015"></a>00015 
-<a name="l00017"></a>00017 <span class="comment">// MARK: -</span>
-<a name="l00018"></a>00018 <span class="comment">// MARK: JSON-RPC v1.0</span>
-<a name="l00020"></a>00020 <span class="comment"></span>
-<a name="l00028"></a><a class="code" href="interface_j_s_o_n_r_p_c_method_call.html">00028</a> <span class="keyword">@interface </span><a class="code" href="interface_j_s_o_n_r_p_c_method_call.html" title="This class represent a method call on a JSON-RPC WebService.">JSONRPCMethodCall</a> : NSObject
-<a name="l00029"></a>00029 {
-<a name="l00031"></a>00031         NSString* _methodName;
-<a name="l00032"></a>00032         <span class="keywordtype">id</span> _parameters;
-<a name="l00033"></a>00033         NSString* _uuid;
-<a name="l00034"></a>00034         
-<a name="l00035"></a>00035         <a class="code" href="interface_j_s_o_n_r_p_c_service.html" title="The class representing a JSON-RPC WebService (identified by an URL to call methods...">JSONRPCService</a>* _service; 
-<a name="l00036"></a>00036 }
-<a name="l00037"></a><a class="code" href="interface_j_s_o_n_r_p_c_method_call.html#afe016de248dcbf86d4ef72bed72c6d83">00037</a> @property(nonatomic, retain) NSString* methodName; 
-<a name="l00038"></a><a class="code" href="interface_j_s_o_n_r_p_c_method_call.html#a4a786b0a782c1ab76460616e301d8d14">00038</a> @property(nonatomic, retain) <span class="keywordtype">id</span> parameters; 
-<a name="l00039"></a><a class="code" href="interface_j_s_o_n_r_p_c_method_call.html#abecfeb8396d8adf522e09ae7e00124ce">00039</a> @property(nonatomic, retain, readonly) NSString* uuid; 
-<a name="l00040"></a>00040 
-<a name="l00045"></a><a class="code" href="interface_j_s_o_n_r_p_c_method_call.html#ab9a5fb09bb0c3403e8366711e075e181">00045</a> @property(nonatomic, assign) <a class="code" href="interface_j_s_o_n_r_p_c_service.html" title="The class representing a JSON-RPC WebService (identified by an URL to call methods...">JSONRPCService</a>* service;
-<a name="l00046"></a>00046 
-<a name="l00048"></a>00048 +(<span class="keywordtype">id</span>)methodCallWithMethodName:(NSString*)methodName parameters:(NSArray*)params;
-<a name="l00050"></a>00050 +(<span class="keywordtype">id</span>)methodCallWithMethodNameAndParams:(NSString *)methodName, ... NS_REQUIRES_NIL_TERMINATION;
-<a name="l00052"></a>00052 +(<span class="keywordtype">id</span>)notificationWithName:(NSString*)methodName parameters:(NSArray*)params; 
-<a name="l00053"></a>00053 
-<a name="l00059"></a>00059 -(<span class="keywordtype">id</span>)initWithMethodName:(NSString*)methodName parameters:(NSArray*)params; <span class="comment">// notifyOnly=NO</span>
-<a name="l00066"></a>00066 <span class="comment"></span>-(<span class="keywordtype">id</span>)initWithMethodNameAndParams:(NSString *)methodName, ... NS_REQUIRES_NIL_TERMINATION;
+<h1>/Users/olivier/Documents/Programmation/iPhone/_Ressources_/AliJSONRPC/AliJSONRPC Framework/JSONRPC/JSONRPCMethodCall.h</h1><a href="_j_s_o_n_r_p_c_method_call_8h.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">/*</span>
+<a name="l00002"></a>00002 <span class="comment"> Copyright (C) 2009 Olivier Halligon. All rights reserved.</span>
+<a name="l00003"></a>00003 <span class="comment"> </span>
+<a name="l00004"></a>00004 <span class="comment"> Redistribution and use in source and binary forms, with or without</span>
+<a name="l00005"></a>00005 <span class="comment"> modification, are permitted provided that the following conditions are met:</span>
+<a name="l00006"></a>00006 <span class="comment"> </span>
+<a name="l00007"></a>00007 <span class="comment"> * Redistributions of source code must retain the above copyright notice, this</span>
+<a name="l00008"></a>00008 <span class="comment"> list of conditions and the following disclaimer.</span>
+<a name="l00009"></a>00009 <span class="comment"> </span>
+<a name="l00010"></a>00010 <span class="comment"> * Redistributions in binary form must reproduce the above copyright notice,</span>
+<a name="l00011"></a>00011 <span class="comment"> this list of conditions and the following disclaimer in the documentation</span>
+<a name="l00012"></a>00012 <span class="comment"> and/or other materials provided with the distribution.</span>
+<a name="l00013"></a>00013 <span class="comment"> </span>
+<a name="l00014"></a>00014 <span class="comment"> * Neither the name of the author nor the names of its contributors may be used</span>
+<a name="l00015"></a>00015 <span class="comment"> to endorse or promote products derived from this software without specific</span>
+<a name="l00016"></a>00016 <span class="comment"> prior written permission.</span>
+<a name="l00017"></a>00017 <span class="comment"> </span>
+<a name="l00018"></a>00018 <span class="comment"> THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot;</span>
+<a name="l00019"></a>00019 <span class="comment"> AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</span>
+<a name="l00020"></a>00020 <span class="comment"> IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE</span>
+<a name="l00021"></a>00021 <span class="comment"> DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE</span>
+<a name="l00022"></a>00022 <span class="comment"> FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL</span>
+<a name="l00023"></a>00023 <span class="comment"> DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR</span>
+<a name="l00024"></a>00024 <span class="comment"> SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER</span>
+<a name="l00025"></a>00025 <span class="comment"> CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,</span>
+<a name="l00026"></a>00026 <span class="comment"> OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</span>
+<a name="l00027"></a>00027 <span class="comment"> OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span>
+<a name="l00028"></a>00028 <span class="comment"> */</span>
+<a name="l00029"></a>00029 
+<a name="l00030"></a>00030 <span class="preprocessor">#import &lt;Foundation/Foundation.h&gt;</span>
+<a name="l00031"></a>00031 
+<a name="l00034"></a>00034 
+<a name="l00035"></a>00035 <span class="keyword">@class</span> <a class="code" href="interface_j_s_o_n_r_p_c_service.html" title="The class representing a JSON-RPC WebService (identified by an URL to call methods...">JSONRPCService</a>;
+<a name="l00036"></a>00036 
+<a name="l00038"></a>00038 <span class="comment">// MARK: -</span>
+<a name="l00039"></a>00039 <span class="comment">// MARK: JSON-RPC v1.0</span>
+<a name="l00041"></a>00041 <span class="comment"></span>
+<a name="l00049"></a><a class="code" href="interface_j_s_o_n_r_p_c_method_call.html">00049</a> <span class="keyword">@interface </span><a class="code" href="interface_j_s_o_n_r_p_c_method_call.html" title="This class represent a method call on a JSON-RPC WebService.">JSONRPCMethodCall</a> : NSObject
+<a name="l00050"></a>00050 {
+<a name="l00052"></a>00052         NSString* _methodName;
+<a name="l00053"></a>00053         <span class="keywordtype">id</span> _parameters;
+<a name="l00054"></a>00054         NSString* _uuid;
+<a name="l00055"></a>00055         
+<a name="l00056"></a>00056         <a class="code" href="interface_j_s_o_n_r_p_c_service.html" title="The class representing a JSON-RPC WebService (identified by an URL to call methods...">JSONRPCService</a>* _service; 
+<a name="l00057"></a>00057 }
+<a name="l00058"></a><a class="code" href="interface_j_s_o_n_r_p_c_method_call.html#afe016de248dcbf86d4ef72bed72c6d83">00058</a> @property(nonatomic, retain) NSString* methodName; 
+<a name="l00059"></a><a class="code" href="interface_j_s_o_n_r_p_c_method_call.html#a4a786b0a782c1ab76460616e301d8d14">00059</a> @property(nonatomic, retain) <span class="keywordtype">id</span> parameters; 
+<a name="l00060"></a><a class="code" href="interface_j_s_o_n_r_p_c_method_call.html#abecfeb8396d8adf522e09ae7e00124ce">00060</a> @property(nonatomic, retain, readonly) NSString* uuid; 
+<a name="l00061"></a>00061 
+<a name="l00066"></a><a class="code" href="interface_j_s_o_n_r_p_c_method_call.html#ab9a5fb09bb0c3403e8366711e075e181">00066</a> @property(nonatomic, retain) <a class="code" href="interface_j_s_o_n_r_p_c_service.html" title="The class representing a JSON-RPC WebService (identified by an URL to call methods...">JSONRPCService</a>* service;
 <a name="l00067"></a>00067 
-<a name="l00068"></a>00068 -(<span class="keywordtype">id</span>)initWithMethodName:(NSString *)methodName parametersList:(va_list)paramsList notifyOnly:(BOOL)notifyOnly; 
-<a name="l00069"></a>00069 
-<a name="l00076"></a>00076 -(<span class="keywordtype">id</span>)initWithMethodName:(NSString*)methodName parameters:(NSArray*)params notifyOnly:(BOOL)notifyOnly;
-<a name="l00077"></a>00077 
-<a name="l00078"></a>00078 -(<span class="keywordtype">id</span>)proxyForJson; 
-<a name="l00079"></a>00079 @end
-<a name="l00080"></a>00080 
-<a name="l00081"></a>00081 
-<a name="l00082"></a>00082 
-<a name="l00083"></a>00083 
-<a name="l00084"></a>00084 
-<a name="l00085"></a>00085 
-<a name="l00087"></a>00087 <span class="comment">// MARK: -</span>
-<a name="l00088"></a>00088 <span class="comment">// MARK: JSON-RPC v2.0</span>
-<a name="l00090"></a>00090 <span class="comment"></span>
-<a name="l00091"></a>00091 
-<a name="l00093"></a><a class="code" href="interface_j_s_o_n_r_p_c_method_call__v2__0.html">00093</a> @interface <a class="code" href="interface_j_s_o_n_r_p_c_method_call__v2__0.html" title="This class is a subclass of JSONRPCMethodCall that handle JSON-RPC v2.0 method call...">JSONRPCMethodCall_v2_0</a> : <a class="code" href="interface_j_s_o_n_r_p_c_method_call.html" title="This class represent a method call on a JSON-RPC WebService.">JSONRPCMethodCall</a>
-<a name="l00095"></a>00095 +(<span class="keywordtype">id</span>)methodCallWithMethodName:(NSString*)methodName namedParameters:(NSDictionary*)params;
-<a name="l00097"></a>00097 +(<span class="keywordtype">id</span>)methodCallWithMethodNameAndNamedParams:(NSString *)methodName, ... NS_REQUIRES_NIL_TERMINATION;
-<a name="l00099"></a>00099 +(<span class="keywordtype">id</span>)notificationWithName:(NSString*)methodName namedParameters:(NSDictionary*)params;
-<a name="l00100"></a>00100 
-<a name="l00106"></a>00106 -(<span class="keywordtype">id</span>)initWithMethodName:(NSString*)methodName namedParameters:(NSDictionary*)params; <span class="comment">// notifyOnly=NO</span>
-<a name="l00114"></a>00114 <span class="comment"></span>-(<span class="keywordtype">id</span>)initWithMethodNameAndNamedParams:(NSString *)methodName, ... NS_REQUIRES_NIL_TERMINATION;
-<a name="l00115"></a>00115 
-<a name="l00116"></a>00116 -(<span class="keywordtype">id</span>)initWithMethodName:(NSString*)methodName namedParametersList:(va_list)paramsList notifyOnly:(BOOL)notifyOnly; 
-<a name="l00117"></a>00117 
-<a name="l00124"></a>00124 -(<span class="keywordtype">id</span>)initWithMethodName:(NSString*)methodName namedParameters:(NSDictionary*)params notifyOnly:(BOOL)notifyOnly;
-<a name="l00125"></a>00125 @end
+<a name="l00069"></a>00069 +(<span class="keywordtype">id</span>)methodCallWithMethodName:(NSString*)methodName parameters:(NSArray*)params;
+<a name="l00071"></a>00071 +(<span class="keywordtype">id</span>)methodCallWithMethodNameAndParams:(NSString *)methodName, ... NS_REQUIRES_NIL_TERMINATION;
+<a name="l00073"></a>00073 +(<span class="keywordtype">id</span>)notificationWithName:(NSString*)methodName parameters:(NSArray*)params; 
+<a name="l00074"></a>00074 
+<a name="l00080"></a>00080 -(<span class="keywordtype">id</span>)initWithMethodName:(NSString*)methodName parameters:(NSArray*)params; <span class="comment">// notifyOnly=NO</span>
+<a name="l00087"></a>00087 <span class="comment"></span>-(<span class="keywordtype">id</span>)initWithMethodNameAndParams:(NSString *)methodName, ... NS_REQUIRES_NIL_TERMINATION;
+<a name="l00088"></a>00088 
+<a name="l00089"></a>00089 -(<span class="keywordtype">id</span>)initWithMethodName:(NSString *)methodName parametersList:(va_list)paramsList notifyOnly:(BOOL)notifyOnly; 
+<a name="l00090"></a>00090 
+<a name="l00097"></a>00097 -(<span class="keywordtype">id</span>)initWithMethodName:(NSString*)methodName parameters:(NSArray*)params notifyOnly:(BOOL)notifyOnly;
+<a name="l00098"></a>00098 
+<a name="l00099"></a>00099 -(<span class="keywordtype">id</span>)proxyForJson; 
+<a name="l00100"></a>00100 @end
+<a name="l00101"></a>00101 
+<a name="l00102"></a>00102 
+<a name="l00103"></a>00103 
+<a name="l00104"></a>00104 
+<a name="l00105"></a>00105 
+<a name="l00106"></a>00106 
+<a name="l00108"></a>00108 <span class="comment">// MARK: -</span>
+<a name="l00109"></a>00109 <span class="comment">// MARK: JSON-RPC v2.0</span>
+<a name="l00111"></a>00111 <span class="comment"></span>
+<a name="l00112"></a>00112 
+<a name="l00114"></a><a class="code" href="interface_j_s_o_n_r_p_c_method_call__v2__0.html">00114</a> @interface <a class="code" href="interface_j_s_o_n_r_p_c_method_call__v2__0.html" title="This class is a subclass of JSONRPCMethodCall that handle JSON-RPC v2.0 method call...">JSONRPCMethodCall_v2_0</a> : <a class="code" href="interface_j_s_o_n_r_p_c_method_call.html" title="This class represent a method call on a JSON-RPC WebService.">JSONRPCMethodCall</a>
+<a name="l00116"></a>00116 +(<span class="keywordtype">id</span>)methodCallWithMethodName:(NSString*)methodName namedParameters:(NSDictionary*)params;
+<a name="l00118"></a>00118 +(<span class="keywordtype">id</span>)methodCallWithMethodNameAndNamedParams:(NSString *)methodName, ... NS_REQUIRES_NIL_TERMINATION;
+<a name="l00120"></a>00120 +(<span class="keywordtype">id</span>)notificationWithName:(NSString*)methodName namedParameters:(NSDictionary*)params;
+<a name="l00121"></a>00121 
+<a name="l00127"></a>00127 -(<span class="keywordtype">id</span>)initWithMethodName:(NSString*)methodName namedParameters:(NSDictionary*)params; <span class="comment">// notifyOnly=NO</span>
+<a name="l00135"></a>00135 <span class="comment"></span>-(<span class="keywordtype">id</span>)initWithMethodNameAndNamedParams:(NSString *)methodName, ... NS_REQUIRES_NIL_TERMINATION;
+<a name="l00136"></a>00136 
+<a name="l00137"></a>00137 -(<span class="keywordtype">id</span>)initWithMethodName:(NSString*)methodName namedParametersList:(va_list)paramsList notifyOnly:(BOOL)notifyOnly; 
+<a name="l00138"></a>00138 
+<a name="l00145"></a>00145 -(<span class="keywordtype">id</span>)initWithMethodName:(NSString*)methodName namedParameters:(NSDictionary*)params notifyOnly:(BOOL)notifyOnly;
+<a name="l00146"></a>00146 @end
 </pre></div></div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Wed May 26 00:30:31 2010 for JSONRPC Framework by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Thu May 27 21:37:28 2010 for JSONRPC Framework by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

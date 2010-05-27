@@ -50,7 +50,7 @@ Internal errors ("methodCall:didFailWithError:")</a></h3>
 <p class="startli">JSON Parsing error (Domain SBJSONErrorDomain), whose userInfo dictionary contains the following keys:</p>
 <ul>
 <li>
-key JSONRPCErrorDataKey : String we tried to parse </li>
+key JSONRPCErrorJSONObjectKey : String we tried to parse as a JSON object </li>
 <li>
 key NSUnderlyingErrorKey : contains an underlying error if any </li>
 </ul>
@@ -60,7 +60,7 @@ key NSUnderlyingErrorKey : contains an underlying error if any </li>
 <p class="startli">JSON-to-Object Conversion error or internal errors (Domain JSONRPCInternalErrorDomain), whose userInfo dictionary contains the following keys:</p>
 <ul>
 <li>
-key JSONRPCErrorDataKey : the JSON object we tried to convert </li>
+key JSONRPCErrorJSONObjectKey : the JSON object we tried to convert </li>
 <li>
 key JSONRPCErrorClassNameKey : the name of the class we tried to convert to </li>
 </ul>
@@ -72,16 +72,21 @@ Server errors ("methodCall:didReturn:error:")</a></h3>
 <p>This section only receive error that comes directly from the WebService you query using JSON-RPC. When the server returned an error in its JSON response, this is obviously a server-dependant error code.</p>
 <ul>
 <li>The Domain for those errors is JSONRPCServerErrorDomain</li>
-<li>The userInfo dictionary contains server-specific error data in the JSONRPCErrorDataKey key</li>
+<li>The userInfo dictionary contains server-specific error object in the JSONRPCErrorJSONObjectKey key.</li>
 </ul>
-<dl class="note"><dt><b>Note:</b></dt><dd>This framework expect the WebService to return error objects structured like this (inspired from JSON-RPC 2.0 specification): <div class="fragment"><pre class="fragment"> {
-    code: <span class="comment">// A Number that indicates the error type that occurred. See also reserved code at http://xmlrpc-epi.sourceforge.net/specs/rfc.fault_codes.php</span>
+<dl class="note"><dt><b>Note:</b></dt><dd>A lot of WebServices return error objects structured like specified in the JSON-RPC 2.0 specification: <div class="fragment"><pre class="fragment"> {
+    code: <span class="comment">// A Number that indicates the error type that occurred. See also reserved codes at http://xmlrpc-epi.sourceforge.net/specs/rfc.fault_codes.php</span>
     message: <span class="comment">// A String providing a short description of the error. The message SHOULD be limited to a concise single sentence.</span>
     data: <span class="comment">// A value that contains additional information about the error. Defined by the Server (e.g. detailed error information, nested errors etc.).</span>
  }
-</pre></div> </dd></dl>
+</pre></div> In such case, this JSON object is still available the JSONRPCErrorJSONObjectKey, but in addition:<ul>
+<li>The value in 'code' is used as the code of the NSError</li>
+<li>The value in 'message' is used as the localizedDescription of the NSError</li>
+<li>The value in 'data' can be retrieved with the @property data of NSError (see NSError(JSON)) </li>
+</ul>
+</dd></dl>
 </div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Wed May 26 00:30:31 2010 for JSONRPC Framework by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Thu May 27 21:37:28 2010 for JSONRPC Framework by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

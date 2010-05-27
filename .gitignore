@@ -1,5 +1,6 @@
 # xcode noise
 build/ 
+build/
 *~.nib/ 
 *.pbxuser 
 *.perspective 

@@ -1,10 +1,31 @@
-//
-//  JSONRPCService.h
-//  JSONRPC
-//
-//  Created by Olivier on 01/05/10.
-//  Copyright 2010 AliSoftware. All rights reserved.
-//
+/*
+ Copyright (C) 2009 Olivier Halligon. All rights reserved.
+ 
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions are met:
+ 
+ * Redistributions of source code must retain the above copyright notice, this
+ list of conditions and the following disclaimer.
+ 
+ * Redistributions in binary form must reproduce the above copyright notice,
+ this list of conditions and the following disclaimer in the documentation
+ and/or other materials provided with the distribution.
+ 
+ * Neither the name of the author nor the names of its contributors may be used
+ to endorse or promote products derived from this software without specific
+ prior written permission.
+ 
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
+ FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 
 #import <Foundation/Foundation.h>
 
@@ -13,7 +34,7 @@
 
 
 NSString* const JSONRPCServerErrorDomain; //!< domain for errors returned by the server (in the JSON object)
-NSString* const JSONRPCErrorDataKey; //!< key used in NSError's userInfo dict to hold JSON-RPC's error "data" member
+NSString* const JSONRPCErrorJSONObjectKey; //!< key used in NSError's userInfo dict to hold JSON-RPC's error "data" member
 
 NSString* const JSONRPCInternalErrorDomain; //!< domain for internal errors: conversion from JSON to Object, ...
 NSInteger const JSONRPCConversionErrorCode; //!< The code for an NSError (JSONRPCInternalErrorDomain) that occurs when converting the JSON object to the resultClass instance
@@ -48,6 +69,28 @@ NSString* const JSONRPCErrorClassNameKey; //!< the key used in NSError's userInf
 -(BOOL)methodCall:(JSONRPCMethodCall*)methodCall didFailWithError:(NSError*)error;
 @end
 
+
+
+/** @brief Category to easily retrieve the 'data' member of the error object
+ *
+ * This only has a meaning if this error object conforms to
+ * <a href="http://groups.google.com/group/json-rpc/web/json-rpc-2-0">the JSON-RPC 2.0
+ * specification, paragraph 5.1</a>, e.g. the object in the 'error' member of the WebService's response
+ * is a JSON object with three fields: */
+//! @code
+//! {
+//!   code: /* a Number that indicates the error type that occurred */,
+//!   message: /* a String providing a short description of the error */,
+//!   data: /* A Primitive or Structured value that contains additional information about the error. The value of this member is defined by the Server */
+//! } @endcode 
+@interface NSError(JSON)
+/** @brief return the 'data' member of the JSON-RPC error when an error is returned by the WebService.
+ *
+ * This returns the 'data' key of the NSDictionary corresponding to the JSONRPCErrorJSONObjectKey of the userInfo dictionary.
+ * This this userInfo key does not exist, is not an NSDictionary or does not contain this 'data' key, this returns nil.
+ */
+@property(nonatomic, readonly) id data;
+@end
 
 
 /////////////////////////////////////////////////////////////////////////////

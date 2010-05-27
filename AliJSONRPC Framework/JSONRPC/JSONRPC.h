@@ -1,10 +1,31 @@
-//
-//  JSONRPC.h
-//  JSONRPC
-//
-//  Created by Olivier on 01/05/10.
-//  Copyright 2010 AliSoftware. All rights reserved.
-//
+/*
+ Copyright (C) 2009 Olivier Halligon. All rights reserved.
+ 
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions are met:
+ 
+ * Redistributions of source code must retain the above copyright notice, this
+ list of conditions and the following disclaimer.
+ 
+ * Redistributions in binary form must reproduce the above copyright notice,
+ this list of conditions and the following disclaimer in the documentation
+ and/or other materials provided with the distribution.
+ 
+ * Neither the name of the author nor the names of its contributors may be used
+ to endorse or promote products derived from this software without specific
+ prior written permission.
+ 
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
+ FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 
 #import "JSONRPCService.h"
 #import "JSONRPCMethodCall.h"
@@ -55,13 +76,8 @@
  ***** <hr>
  *
  * @author O.Halligon
- * @version 1.0
+ * @version 1.1
  * @date May 2010
- *
- * @warning Even if the JSON object returned by the server is not normalized, this framework expect the object in the 'error'
- *          key of the JSON response to  have the same structure than the one defined in the JSON-RPC 2.0 specification,
- *          i.e. a JSON complex object containing the three keys/properties "code", "message" and "data", as
- *          NSError objects are constructing using the "code", "message" and "data" properties of the JSON error object.
  *
  * @note The JSON part is assured through the <a href="http://code.google.com/p/json-framework/">SBJSON</a> framework.
  *
@@ -193,12 +209,12 @@
  * <li>Network error (Domain NSURLErrorDomain)</li>
  *
  * <li>JSON Parsing error (Domain SBJSONErrorDomain), whose userInfo dictionary contains the following keys:<ul>
- *   <li>key JSONRPCErrorDataKey : String we tried to parse</li>
+ *   <li>key JSONRPCErrorJSONObjectKey : String we tried to parse as a JSON object</li>
  *   <li>key NSUnderlyingErrorKey : contains an underlying error if any</li>
  * </ul></li>
  * 
  * <li>JSON-to-Object Conversion error or internal errors (Domain JSONRPCInternalErrorDomain), whose userInfo dictionary contains the following keys:<ul>
- *   <li>key JSONRPCErrorDataKey : the JSON object we tried to convert</li>
+ *   <li>key JSONRPCErrorJSONObjectKey : the JSON object we tried to convert</li>
  *   <li>key JSONRPCErrorClassNameKey : the name of the class we tried to convert to</li>
  * </ul></li>
  *
@@ -209,16 +225,20 @@
  * When the server returned an error in its JSON response, this is obviously a server-dependant error code.
  *
  * - The Domain for those errors is JSONRPCServerErrorDomain
- * - The userInfo dictionary contains server-specific error data in the JSONRPCErrorDataKey key
+ * - The userInfo dictionary contains server-specific error object in the JSONRPCErrorJSONObjectKey key.
  *
- * @note This framework expect the WebService to return  error objects structured like this (inspired from JSON-RPC 2.0 specification):
+ * @note A lot of WebServices return error objects structured like specified in the JSON-RPC 2.0 specification:
  * @code
  * {
- *    code: // A Number that indicates the error type that occurred. See also reserved code at http://xmlrpc-epi.sourceforge.net/specs/rfc.fault_codes.php
+ *    code: // A Number that indicates the error type that occurred. See also reserved codes at http://xmlrpc-epi.sourceforge.net/specs/rfc.fault_codes.php
  *    message: // A String providing a short description of the error. The message SHOULD be limited to a concise single sentence.
  *    data: // A value that contains additional information about the error. Defined by the Server (e.g. detailed error information, nested errors etc.).
  * }
  * @endcode
+ * In such case, this JSON object is still available the JSONRPCErrorJSONObjectKey, but in addition:
+ * - The value in 'code' is used as the code of the NSError
+ * - The value in 'message' is used as the localizedDescription of the NSError
+ * - The value in 'data' can be retrieved with the \@property data of NSError (see NSError(JSON))
  */
 
 

@@ -47,7 +47,7 @@
   [<a class="code" href="interface_j_s_o_n_r_p_c_service_proxy.html#ac5fe5afa1fdca030a06e6d29d7496672" title="the service the proxy acts for">service</a>.<a class="code" href="interface_j_s_o_n_r_p_c_service.html#a10d83b3d133196f7476d83fc12dfefe6" title="A proxy object on which you can call any Obj-C message (without any param or with...">proxy</a> echo:<a class="code" href="_j_s_o_n_r_p_c_8h.html#acd656d301ee55725a5c64566b95aeec9" title="Commodity macro to create an NSArray with arbitrary number of objects.">mkArray</a>(<span class="stringliteral">@&quot;Hello&quot;</span>)]; <span class="comment">// equivalent to [service callMethodWithName:@&quot;echo&quot; parameters:mkArray(@&quot;Hello&quot;)]</span>
 </pre></div><p> It is a nice way to have a somewhat transparent way to manipulate the WebService's API, <b>but has the drawback that it will generate warnings on compilation</b> such as "xxx may not respond to selector yyy" (as the message you will call on this proxy object are not declared but instead automatically forwarded using forwardInvocation:) </p>
 </div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Wed May 26 00:30:31 2010 for JSONRPC Framework by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Thu May 27 21:37:29 2010 for JSONRPC Framework by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>
