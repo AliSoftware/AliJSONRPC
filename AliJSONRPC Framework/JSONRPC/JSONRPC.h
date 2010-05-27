@@ -68,6 +68,10 @@
  *    This framework currently support JSON-RPC 1.0 and 2.0.
  *
  * - @subpage Overview
+ *    - @subpage OverviewCreate
+ *    - @subpage OverviewCall
+ *    - @subpage OverviewResponse
+ *    - @subpage OverviewRelease
  * - @subpage ErrMgmt
  *    - @subpage ErrCatch
  *    - @subpage ErrCodes
@@ -87,18 +91,29 @@
 /**
  * @page Overview Overview
  * 
- * Briefely, you use this framework like this:<ol>
- * 
- * <li>Create a JSONRPCService object by passing the URL of the WebService:</li>
+ * Briefely, you use this framework in four steps:
+ *  -# @ref OverviewCreate
+ *  -# @ref OverviewCall
+ *  -# @ref OverviewResponse
+ *  -# @ref OverviewRelease
+ *
+ * @note some useful macros to create arrays and dicts are defined in JSONRPC.h
+ *
+ *
+ * @section OverviewCreate Create a JSONRPCService object
+ * You do this typically by passing the URL of the WebService to the init constructor:
  * @code
  * JSONRPCService* service = [[JSONRPCService alloc] initWithURL:kServiceURL];
  * @endcode
  *
- * <li>Call a remote procedure of the WebService using JSON-RPC. To do this, you have <b>multiple equivalent possibilities</b>:
+ *
+ * @section OverviewCall Call a remote procedure of the WebService using JSON-RPC
+ * To do this, you have <b>multiple equivalent possibilities</b>:
  * <ul>
  *
  *   <li> Use the JSONRPCService#callMethodWithName:parameters: method,
- *       passing it the name of the method to call (an NSString) and its parameters (an NSArray)</li>
+ *       passing it the name of the method to call (an NSString) and its parameters (an NSArray)
+ *   </li>
  *
  *   <li> Use the JSONRPCService#callMethodWithNameAndParams: method,
  *       passing it the name (NSString) of the method to call, followed by a variable number of arguments
@@ -118,9 +133,11 @@
  *      @endcode
  *   </li>
  * 
- * </ul></li>
+ * </ul>
  *
- * <li> To handle the response from the server, use the JSONRPCResponseHandler object returned by the method used to make the call:
+ *
+ * @section OverviewResponse Handle the response from the server
+ * When you call a JSON-RPC method, you get a JSONRPCResponseHandler object as a return value.
  *   <ul>
  *     <li> If you don't do anything with the JSONRPCResponseHandler (neither set a delegate nor a the callback),
  *          the method @ref JSONRPCDelegate "methodCall:didReturn:error:" will be called on the JSONRPCService 's delegate.
@@ -158,11 +175,13 @@
  *   [[service callMethodWithNameAndParams:@"echo",@"Hello there",nil]
  *    setDelegate:self callback:@selector(methodCall:didReturn:error) resultClass:[MyCustomClass class]];
  *   @endcode
- * </li>
  *
- * <li> Of course don't forget to release your JSONRPCService when you are done. </li>
- * </ol>
  *
+ * @section OverviewRelease Release the service
+ * Of course don't forget to release your JSONRPCService when you are done.
+ *
+ *
+ * @section OverviewNext Going further
  * As you can see, the usage of this framework is highly flexible. You can call a JSON-RPC method using multiple different syntaxes,
  * and you can also receive the response in the way you think it's the best suitable for your project, centralizing the responses on
  * one object (the JSONRPCService#delegate) or on separate objects (JSONRPCResponseHandler#delegate) and calling a unique \@selector
@@ -225,9 +244,9 @@
  * When the server returned an error in its JSON response, this is obviously a server-dependant error code.
  *
  * - The Domain for those errors is JSONRPCServerErrorDomain
- * - The userInfo dictionary contains server-specific error object in the JSONRPCErrorJSONObjectKey key.
+ * - The userInfo dictionary contains server-specific error object in the <tt>JSONRPCErrorJSONObjectKey</tt> key.
  *
- * @note A lot of WebServices return error objects structured like specified in the JSON-RPC 2.0 specification:
+ * @note JSON-RPC v2.0 WebServices should return the error at the following format, according to the specification:
  * @code
  * {
  *    code: // A Number that indicates the error type that occurred. See also reserved codes at http://xmlrpc-epi.sourceforge.net/specs/rfc.fault_codes.php
@@ -235,7 +254,8 @@
  *    data: // A value that contains additional information about the error. Defined by the Server (e.g. detailed error information, nested errors etc.).
  * }
  * @endcode
- * In such case, this JSON object is still available the JSONRPCErrorJSONObjectKey, but in addition:
+ * Actually, even some JSON-RPC v1.0 WebServices also return error objects using this convention.
+ * In such case, this JSON object is still available the <tt>JSONRPCErrorJSONObjectKey</tt>, but in addition:
  * - The value in 'code' is used as the code of the NSError
  * - The value in 'message' is used as the localizedDescription of the NSError
  * - The value in 'data' can be retrieved with the \@property data of NSError (see NSError(JSON))

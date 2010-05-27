@@ -22,18 +22,24 @@
 <div class="contents">
 
 
-<h1><a class="anchor" id="Overview">Overview </a></h1><p>Briefely, you use this framework like this:</p>
-<ol>
-<li>
-<p class="startli">Create a <a class="el" href="interface_j_s_o_n_r_p_c_service.html" title="The class representing a JSON-RPC WebService (identified by an URL to call methods...">JSONRPCService</a> object by passing the URL of the WebService: </p>
+<h1><a class="anchor" id="Overview">Overview </a></h1><p>Briefely, you use this framework in four steps:</p>
+<ol type="1">
+<li><a class="el" href="_overview.html#OverviewCreate">Create a JSONRPCService object</a></li>
+<li><a class="el" href="_overview.html#OverviewCall">Call a remote procedure of the WebService using JSON-RPC.</a></li>
+<li><a class="el" href="_overview.html#OverviewResponse">Handle the response from the server</a></li>
+<li><a class="el" href="_overview.html#OverviewRelease">Release the service</a></li>
+</ol>
+<dl class="note"><dt><b>Note:</b></dt><dd>some useful macros to create arrays and dicts are defined in <a class="el" href="_j_s_o_n_r_p_c_8h.html" title="Common header that include other headers of the framework. Contains useful macros...">JSONRPC.h</a></dd></dl>
+<h2><a class="anchor" id="OverviewCreate">
+Create a JSONRPCService object</a></h2>
+<p>You do this typically by passing the URL of the WebService to the init constructor: </p>
 <div class="fragment"><pre class="fragment"> <a class="code" href="interface_j_s_o_n_r_p_c_service.html" title="The class representing a JSON-RPC WebService (identified by an URL to call methods...">JSONRPCService</a>* service = [[<a class="code" href="interface_j_s_o_n_r_p_c_service.html" title="The class representing a JSON-RPC WebService (identified by an URL to call methods...">JSONRPCService</a> alloc] initWithURL:kServiceURL];
-</pre></div><p class="endli"></p>
-</li>
-<li>
-<p class="startli">Call a remote procedure of the WebService using JSON-RPC. To do this, you have <b>multiple equivalent possibilities</b>: </p>
+</pre></div><h2><a class="anchor" id="OverviewCall">
+Call a remote procedure of the WebService using JSON-RPC.</a></h2>
+<p>To do this, you have <b>multiple equivalent possibilities</b>: </p>
 <ul>
 <li>
-<p class="startli">Use the <a class="el" href="interface_j_s_o_n_r_p_c_service.html#aeb4b174af586824d86ae4c438cbb1971" title="Commodity method to call a JSON-RPC method on the WebService.">callMethodWithName:parameters: (JSONRPCService)</a> method, passing it the name of the method to call (an NSString) and its parameters (an NSArray)</p>
+<p class="startli">Use the <a class="el" href="interface_j_s_o_n_r_p_c_service.html#aeb4b174af586824d86ae4c438cbb1971" title="Commodity method to call a JSON-RPC method on the WebService.">callMethodWithName:parameters: (JSONRPCService)</a> method, passing it the name of the method to call (an NSString) and its parameters (an NSArray) </p>
 <p class="endli"></p>
 </li>
 <li>
@@ -52,10 +58,9 @@
 </pre></div> <p class="endli"></p>
 </li>
 </ul>
-<p class="endli"></p>
-</li>
-<li>
-<p class="startli">To handle the response from the server, use the <a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html" title="an intermediate object returned by the JSONRPCService when you call a method, to...">JSONRPCResponseHandler</a> object returned by the method used to make the call: </p>
+<h2><a class="anchor" id="OverviewResponse">
+Handle the response from the server</a></h2>
+<p>When you call a JSON-RPC method, you get a <a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html" title="an intermediate object returned by the JSONRPCService when you call a method, to...">JSONRPCResponseHandler</a> object as a return value. </p>
 <ul>
 <li>
 If you don't do anything with the <a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html" title="an intermediate object returned by the JSONRPCService when you call a method, to...">JSONRPCResponseHandler</a> (neither set a delegate nor a the callback), the method <a class="el" href="protocol_j_s_o_n_r_p_c_delegate-p.html">methodCall:didReturn:error:</a> will be called on the <a class="el" href="interface_j_s_o_n_r_p_c_service.html" title="The class representing a JSON-RPC WebService (identified by an URL to call methods...">JSONRPCService</a> 's delegate. If no delegate is set on the <a class="el" href="interface_j_s_o_n_r_p_c_service.html" title="The class representing a JSON-RPC WebService (identified by an URL to call methods...">JSONRPCService</a> object neither, the response will be ignored. </li>
@@ -85,15 +90,15 @@ If the JSON object returned by the WebService is an array, the convertion from t
 <p>Note that you can nest tje <a class="el" href="interface_j_s_o_n_r_p_c_service.html" title="The class representing a JSON-RPC WebService (identified by an URL to call methods...">JSONRPCService</a> method call with the <a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html" title="an intermediate object returned by the JSONRPCService when you call a method, to...">JSONRPCResponseHandler</a> calls to be more concise: </p>
 <div class="fragment"><pre class="fragment">   [[service <a class="code" href="interface_j_s_o_n_r_p_c_service.html#ad5c6e7abfbbdfc73e32f7461677965b5" title="Commodity method to call a JSON-RPC method on the WebService.">callMethodWithNameAndParams</a>:@&quot;echo&quot;,@&quot;Hello there&quot;,nil]
     <a class="code" href="interface_j_s_o_n_r_p_c_response_handler.html#a305c8ac7ca06265ed673ef97d0b12b1a" title="set both the delegate, the callback and the resultClass at once.">setDelegate</a>:self <a class="code" href="interface_j_s_o_n_r_p_c_response_handler.html#a305c8ac7ca06265ed673ef97d0b12b1a" title="set both the delegate, the callback and the resultClass at once.">callback</a>:@selector(<a class="code" href="interface_j_s_o_n_r_p_c_response_handler.html#a305c8ac7ca06265ed673ef97d0b12b1a" title="set both the delegate, the callback and the resultClass at once.">methodCall</a>:<a class="code" href="interface_j_s_o_n_r_p_c_response_handler.html#a305c8ac7ca06265ed673ef97d0b12b1a" title="set both the delegate, the callback and the resultClass at once.">didReturn</a>:error) <a class="code" href="interface_j_s_o_n_r_p_c_response_handler.html#a305c8ac7ca06265ed673ef97d0b12b1a" title="set both the delegate, the callback and the resultClass at once.">resultClass</a>:[MyCustomClass class]];
-</pre></div> <p class="endli"></p>
-</li>
-<li>
-Of course don't forget to release your <a class="el" href="interface_j_s_o_n_r_p_c_service.html" title="The class representing a JSON-RPC WebService (identified by an URL to call methods...">JSONRPCService</a> when you are done.  </li>
-</ol>
+</pre></div><h2><a class="anchor" id="OverviewRelease">
+Release the service</a></h2>
+<p>Of course don't forget to release your <a class="el" href="interface_j_s_o_n_r_p_c_service.html" title="The class representing a JSON-RPC WebService (identified by an URL to call methods...">JSONRPCService</a> when you are done.</p>
+<h2><a class="anchor" id="OverviewNext">
+Going further</a></h2>
 <p>As you can see, the usage of this framework is highly flexible. You can call a JSON-RPC method using multiple different syntaxes, and you can also receive the response in the way you think it's the best suitable for your project, centralizing the responses on one object (the <a class="el" href="interface_j_s_o_n_r_p_c_service.html#ad5361d24af5c0e36868d423320f18ae1" title="Object to handle errors if not handled by JSONRPCResponseHandler::delegate .">JSONRPCService::delegate</a>) or on separate objects (<a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html#a8b58e7b4c93462c5192f734c576334a8" title="The delegate object on which the callback will be called.">JSONRPCResponseHandler::delegate</a>) and calling a unique @selector method for handling the response of all your method calls, or a different @selector for each.</p>
 <p>For more information, you can look at the <a class="el" href="_example.html">Example</a>. </p>
 </div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Thu May 27 21:37:28 2010 for JSONRPC Framework by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Thu May 27 23:03:40 2010 for JSONRPC Framework by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>
