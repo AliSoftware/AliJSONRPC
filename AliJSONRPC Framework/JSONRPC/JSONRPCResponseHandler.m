@@ -32,6 +32,7 @@
 
 #import "JSONRPCMethodCall.h"
 #import "JSONRPCService.h"
+#import "JSONRPC_Extensions.h"
 
 //! @private Private API @internal
 @interface JSONRPCResponseHandler()
@@ -98,114 +99,99 @@
 }
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
-	if (!self.methodCall.uuid) {
-		[_receivedData release];
-		_receivedData = nil;
+	NSError* jsonParsingError = nil;
+	NSString* jsonStr = [[[NSString alloc] initWithData:_receivedData encoding:NSUTF8StringEncoding] autorelease];
+	SBJSON* parser = [[SBJSON alloc] init];
+	id respObj = [parser objectWithString:jsonStr error:&jsonParsingError];
+	[parser release];
 
-		return; // if it was a notification, no response expected.
-	}
-	
-	if (!_delegate || [_delegate respondsToSelector:_callbackSelector])
-	{
-		NSError* jsonParsingError = nil;
-		NSString* jsonStr = [[[NSString alloc] initWithData:_receivedData encoding:NSUTF8StringEncoding] autorelease];
-		SBJSON* parser = [[SBJSON alloc] init];
-		id respObj = [parser objectWithString:jsonStr error:&jsonParsingError];
-		[parser release];
+	[_receivedData release];
+	_receivedData = nil;
 
-		[_receivedData release];
-		_receivedData = nil;
-
-		if (jsonParsingError) {
-			// raise an error regarding JSON Parsing
-			NSMutableDictionary* verboseUserInfo = [NSMutableDictionary dictionaryWithDictionary:[jsonParsingError userInfo]];
-			[verboseUserInfo setObject:jsonStr forKey:JSONRPCErrorJSONObjectKey];
-			NSError* verboseJsonParsingError = [NSError errorWithDomain:[jsonParsingError domain]
-																   code:[jsonParsingError code]
-															   userInfo:verboseUserInfo];
-			
-			SEL errSel = @selector(methodCall:didFailWithError:);
-			BOOL cont = YES;
-			if (_delegate && [_delegate respondsToSelector:errSel]) {
-				cont = [_delegate methodCall:self.methodCall didFailWithError:verboseJsonParsingError];
-			}
-			if (cont)
-			{
-				id<JSONRPCDelegate> del = self.methodCall.service.delegate;
-				if (del && [del respondsToSelector:errSel]) {
-					cont = [del methodCall:self.methodCall didFailWithError:verboseJsonParsingError];
-				}
-				(void)cont; // UNUSED AFTER THAT
-			}			
-		} else {
-			// extract result from JSON response
-			id resultJsonObject = [respObj objectForKey:@"result"];
-			if (resultJsonObject == [NSNull null]) resultJsonObject = nil;
-			id parsedResult = resultJsonObject;
-			if (resultJsonObject && _resultClass) {
-				// decode object as expected Class
-				parsedResult = [self objectFromJson:resultJsonObject];
-				if (!parsedResult) {
-					// raise and error regarding conversion (send to _delegate or fallback to service)
-					SEL errSel = @selector(methodCall:didFailToConvertResponse:toClass:);
-					NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
-											  resultJsonObject,JSONRPCErrorJSONObjectKey,
-											  NSLocalizedString(@"error.json-conversion.message","Error message upon conversion"),NSLocalizedDescriptionKey,
-											  NSStringFromClass(_resultClass),JSONRPCErrorClassNameKey,
-											  nil];
-					NSError* error = [NSError errorWithDomain:JSONRPCInternalErrorDomain
-														 code:JSONRPCConversionErrorCode
-													 userInfo:userInfo];
-					BOOL cont = YES;
-					if (_delegate && [_delegate respondsToSelector:errSel]) {
-						cont = [_delegate methodCall:self.methodCall didFailWithError:error];
-					}
-					if (cont)
-					{
-						id<JSONRPCDelegate> del = self.methodCall.service.delegate;
-						if (del && [del respondsToSelector:errSel]) {
-							cont = [del methodCall:self.methodCall didFailWithError:error];
-						}
-						(void)cont; // UNUSED AFTER THAT
-					}
-					return;
-				}
-			}
-			
-			// extract error from JSON response
-			id errorJsonObject  = [respObj objectForKey:@"error"];
-			if (errorJsonObject == [NSNull null]) errorJsonObject = nil;
-			NSError* parsedError = nil;
-			if (errorJsonObject) {
-				parsedError = [NSError errorWithDomain:JSONRPCServerErrorDomain
-												  code:[[errorJsonObject objectForKey:@"code"] longValue]
-											  userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
-														[errorJsonObject objectForKey:@"message"]?:@"",NSLocalizedDescriptionKey,
-														errorJsonObject,JSONRPCErrorJSONObjectKey,
-														nil]];
-			}
-
-			JSONRPCMethodCall* methCall = self.methodCall;
-			NSObject<JSONRPCDelegate>* realDelegate = _delegate ?: methCall.service.delegate;
-			SEL realSel = _callbackSelector ?: @selector(methodCall:didReturn:error:);
-
-			if (realDelegate) {
-				NSInvocation* inv = [NSInvocation invocationWithMethodSignature:[realDelegate methodSignatureForSelector:realSel]];
-				[inv setSelector:realSel];
-				[inv setArgument:&methCall atIndex:2];
-				[inv setArgument:&parsedResult atIndex:3];
-				[inv setArgument:&parsedError atIndex:4];
-				[inv invokeWithTarget:realDelegate];
-			} else {
-				NSLog(@"warning: JSONRPCResponseHandler did receive a response but no delegate defined: the response has been ignored"); 
-			}
-		}	
-	} else {
-		[_delegate doesNotRecognizeSelector:_callbackSelector];
+	if (jsonParsingError) {
+		// raise an error regarding JSON Parsing
+		NSMutableDictionary* verboseUserInfo = [NSMutableDictionary dictionaryWithDictionary:[jsonParsingError userInfo]];
+		[verboseUserInfo setObject:jsonStr forKey:JSONRPCErrorJSONObjectKey];
+		NSError* verboseJsonParsingError = [NSError errorWithDomain:[jsonParsingError domain]
+															   code:[jsonParsingError code]
+														   userInfo:verboseUserInfo];
 		
-		[_receivedData autorelease];
-		_receivedData = nil;
-	}
+		SEL errSel = @selector(methodCall:didFailWithError:);
+		BOOL cont = YES;
+		if (_delegate && [_delegate respondsToSelector:errSel]) {
+			cont = [_delegate methodCall:self.methodCall didFailWithError:verboseJsonParsingError];
+		}
+		if (cont)
+		{
+			id<JSONRPCDelegate> del = self.methodCall.service.delegate;
+			if (del && [del respondsToSelector:errSel]) {
+				cont = [del methodCall:self.methodCall didFailWithError:verboseJsonParsingError];
+			}
+			(void)cont; // UNUSED AFTER THAT
+		}			
+	} else {
+		// extract result from JSON response
+		id resultJsonObject = [respObj objectForKey:@"result"];
+		if (resultJsonObject == [NSNull null]) resultJsonObject = nil;
+		id parsedResult = resultJsonObject;
+		if (resultJsonObject && _resultClass) {
+			// decode object as expected Class
+			parsedResult = [self objectFromJson:resultJsonObject];
+			if (!parsedResult) {
+				// raise and error regarding conversion (send to _delegate or fallback to service)
+				SEL errSel = @selector(methodCall:didFailToConvertResponse:toClass:);
+				NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+										  resultJsonObject,JSONRPCErrorJSONObjectKey,
+										  NSLocalizedString(@"error.json-conversion.message","Error message upon conversion"),NSLocalizedDescriptionKey,
+										  NSStringFromClass(_resultClass),JSONRPCErrorClassNameKey,
+										  nil];
+				NSError* error = [NSError errorWithDomain:JSONRPCInternalErrorDomain
+													 code:JSONRPCConversionErrorCode
+												 userInfo:userInfo];
+				BOOL cont = YES;
+				if (_delegate && [_delegate respondsToSelector:errSel]) {
+					cont = [_delegate methodCall:self.methodCall didFailWithError:error];
+				}
+				if (cont)
+				{
+					id<JSONRPCDelegate> del = self.methodCall.service.delegate;
+					if (del && [del respondsToSelector:errSel]) {
+						cont = [del methodCall:self.methodCall didFailWithError:error];
+					}
+					(void)cont; // UNUSED AFTER THAT
+				}
+				return;
+			}
+		}
+		
+		// extract error from JSON response
+		id errorJsonObject  = [respObj objectForKey:@"error"];
+		if (errorJsonObject == [NSNull null]) errorJsonObject = nil;
+		NSError* parsedError = nil;
+		if (errorJsonObject) {
+			parsedError = [NSError errorWithDomain:JSONRPCServerErrorDomain
+											  code:[[errorJsonObject objectForKey:@"code"] longValue]
+										  userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
+													[errorJsonObject objectForKey:@"message"]?:@"",NSLocalizedDescriptionKey,
+													errorJsonObject,JSONRPCErrorJSONObjectKey,
+													nil]];
+		}
+
+		JSONRPCMethodCall* methCall = self.methodCall;
+		NSObject<JSONRPCDelegate>* realDelegate = _delegate ?: methCall.service.delegate;
+		SEL realSel = _callbackSelector ?: @selector(methodCall:didReturn:error:);
+
+		if (realDelegate) {
+			NSInvocation* inv = [NSInvocation invocationWithMethodSignature:[realDelegate methodSignatureForSelector:realSel]];
+			[inv setSelector:realSel];
+			[inv setArgument:&methCall atIndex:2];
+			[inv setArgument:&parsedResult atIndex:3];
+			[inv setArgument:&parsedError atIndex:4];
+			[inv invokeWithTarget:realDelegate];
+		} else {
+			NSLog(@"warning: JSONRPCResponseHandler did receive a response but no delegate defined: the response has been ignored"); 
+		}
+	}	
 }
 
 -(id)objectFromJson:(id)jsonObject {
@@ -213,13 +199,7 @@
 	{
 		if ([jsonObject isKindOfClass:[NSArray class]]) {
 			// Convert each object in the NSArray
-			NSMutableArray* tab = [NSMutableArray arrayWithCapacity:[jsonObject count]];
-			for(id oneJsonObj in jsonObject) {
-				id oneObj = [[[_resultClass alloc] initWithJson:oneJsonObj] autorelease];
-				if (!oneObj) return nil;
-				[tab addObject:oneObj];
-			}
-			return [NSArray arrayWithArray:tab];
+			return [NSArray arrayWithJson:jsonObject itemsClass:_resultClass];
 		} else {
 			// not an NSArray
 			return [[[_resultClass alloc] initWithJson:jsonObject] autorelease];

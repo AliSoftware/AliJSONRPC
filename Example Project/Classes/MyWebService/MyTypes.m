@@ -6,6 +6,7 @@
 //  Copyright 2010 AliSoftware. All rights reserved.
 //
 
+#import "JSONRPC.h"
 #import "MyTypes.h"
 
 /////////////////////////////////////////////////////////////////////////////
@@ -56,3 +57,26 @@
 -(NSString*)description { return [NSString stringWithFormat:@"<Couple (%@ + %@)>",self.husband,self.wife]; }
 @end
 
+
+/////////////////////////////////////////////////////////////////////////////
+// MARK: -
+// MARK: SMD
+/////////////////////////////////////////////////////////////////////////////
+
+@implementation ServiceDef
+-(NSString*)objectName { return [_jsonData objectForKey:@"objectName"]; }
+-(NSURL*)serviceURL { return [NSURL URLWithString:[_jsonData objectForKey:@"serviceURL"]]; }
+-(NSArray*)methods { return [NSArray arrayWithJson:[_jsonData objectForKey:@"methods"] itemsClass:[MethodDef class]]; }
+-(NSString*)description { return [NSString stringWithFormat:@"<Service %@ (%@) exposes methods: %@>",self.objectName,self.serviceURL,self.methods]; }
+@end
+
+@implementation MethodDef
+-(NSString*)name { return [_jsonData objectForKey:@"name"]; }
+-(NSArray*)parameters { return [NSArray arrayWithJson:[_jsonData objectForKey:@"parameters"] itemsClass:[ParamDef class]]; }
+-(NSString*)description { return [NSString stringWithFormat:@"<Method %@(%@)>",self.name,[self.parameters componentsJoinedByString:@","]]; }
+@end
+
+@implementation ParamDef
+-(NSString*)name { return [_jsonData objectForKey:@"name"]; }
+-(NSString*)description { return self.name /* [NSString stringWithFormat:@"<Param %@>",self.name] */ ; }
+@end

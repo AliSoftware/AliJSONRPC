@@ -39,24 +39,13 @@ NSString* const JSONRPCErrorJSONObjectKey = @"JSONObject";
 NSString* const JSONRPCErrorClassNameKey = @"className";
 NSInteger const JSONRPCConversionErrorCode = 10;
 
-/////////////////////////////////////////////////////////////////////////////
-
-@implementation NSError(JSON)
--(id)data {
-	id jsonObj = [[self userInfo] objectForKey:JSONRPCErrorJSONObjectKey];
-	if (jsonObj && [jsonObj isKindOfClass:[NSDictionary class]])
-		return [jsonObj objectForKey:@"data"];
-	else
-		return nil;
-}
-@end
-
 
 /////////////////////////////////////////////////////////////////////////////
 
 
 @implementation JSONRPCService
 @synthesize serviceURL = _serviceURL;
+@synthesize version = _version;
 @synthesize delegate;
 
 -(id)proxy {
@@ -70,16 +59,17 @@ NSInteger const JSONRPCConversionErrorCode = 10;
 /////////////////////////////////////////////////////////////////////////////
 
 
-+(id)serviceWithURL:(NSURL*)url
++(id)serviceWithURL:(NSURL*)url version:(JSONRPCVersion)version
 {
-	return [[[JSONRPCService alloc] initWithURL:url] autorelease];
+	return [[[JSONRPCService alloc] initWithURL:url version:version] autorelease];
 }
 
-- (id) initWithURL:(NSURL*)url
+- (id) initWithURL:(NSURL*)url  version:(JSONRPCVersion)version
 {
 	self = [super init];
 	if (self != nil) {
 		_serviceURL = [url retain];
+		_version = version;
 	}
 	return self;
 }
@@ -104,20 +94,27 @@ NSInteger const JSONRPCConversionErrorCode = 10;
 
 - (JSONRPCResponseHandler*)callMethod:(JSONRPCMethodCall*)methodCall
 {
+	methodCall.service = self;
 	NSString* jsonStr = [[methodCall proxyForJson] JSONRepresentation];
+	
+	if ((self.version<JSONRPCVersion_1_1) && ([methodCall.parameters isKindOfClass:[NSDictionary class]])) {
+		NSLog(@"JSON-RPC: warning: named parameters are only supported by JSON-RPC Service version 1.1 or higher");
+	}
 	
 	NSMutableURLRequest* req = [NSMutableURLRequest requestWithURL:self.serviceURL];
 	[req setHTTPMethod:@"POST"];
 	[req setHTTPBody:[jsonStr dataUsingEncoding:NSUTF8StringEncoding]];
 	[req setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+	[req setValue:@"application/json" forHTTPHeaderField:@"Accept"];
 	
 	JSONRPCResponseHandler* d = [[[JSONRPCResponseHandler alloc] init] autorelease];
 	d.methodCall = methodCall;
-	d.methodCall.service = self;
 	[NSURLConnection connectionWithRequest:req delegate:d];
 	return d;
 	
 }
+
+// MARK: -
 
 - (JSONRPCResponseHandler*)callMethodWithName:(NSString *)methodName parameters:(NSArray*)params
 {
@@ -128,50 +125,25 @@ NSInteger const JSONRPCConversionErrorCode = 10;
 {
 	va_list ap;
 	va_start(ap, methodName);
-	JSONRPCMethodCall* mCall = [[[JSONRPCMethodCall alloc] initWithMethodName:methodName parametersList:ap notifyOnly:NO] autorelease];
+	JSONRPCMethodCall* mCall = [[[JSONRPCMethodCall alloc] initWithMethodName:methodName parametersList:ap] autorelease];
 	JSONRPCResponseHandler* ret = [self callMethod:mCall];
 	va_end(ap);
 	
 	return ret;
 }
 
-- (void)sendNotificationWithName:(NSString *)methodName parameters:(NSArray*)params
-{
-	JSONRPCMethodCall* mCall = [[[JSONRPCMethodCall alloc] initWithMethodName:methodName parameters:params notifyOnly:YES] autorelease];
-	[self callMethod:mCall];
-}
-
-
-
-@end
-
-
-
-
-@implementation JSONRPCService_v2_0
 - (JSONRPCResponseHandler*)callMethodWithName:(NSString *)methodName namedParameters:(NSDictionary*)params
 {
-	return [self callMethod:[JSONRPCMethodCall_v2_0 methodCallWithMethodName:methodName namedParameters:params]];
+	return [self callMethod:[JSONRPCMethodCall methodCallWithMethodName:methodName namedParameters:params]];
 }
 - (JSONRPCResponseHandler*)callMethodWithNameAndNamedParams:(NSString *)methodName, ... 
 {
 	va_list ap;
 	va_start(ap,methodName);
-	JSONRPCMethodCall_v2_0* mCall = [[[JSONRPCMethodCall_v2_0 alloc] initWithMethodName:methodName namedParametersList:ap notifyOnly:NO] autorelease];
+	JSONRPCMethodCall* mCall = [[[JSONRPCMethodCall alloc] initWithMethodName:methodName namedParametersList:ap] autorelease];
 	JSONRPCResponseHandler* ret = [self callMethod:mCall];
 	va_end(ap);
 	return ret;
-}
-- (void)sendNotificationWithName:(NSString *)methodName namedParameters:(NSDictionary*)params
-{
-	[self callMethod:[JSONRPCMethodCall_v2_0 notificationWithName:methodName namedParameters:params]];
-}
-- (void)sendNotificationWithNameAndNamedParams:(NSString *)methodName, ... {
-	va_list ap;
-	va_start(ap,methodName);
-	JSONRPCResponseHandler* ret = [self callMethod:[[[JSONRPCMethodCall_v2_0 alloc] initWithMethodName:methodName namedParametersList:ap notifyOnly:YES] autorelease]];
-	va_end(ap);
-	(void)ret;	//ignore result
 }
 @end
 
@@ -222,6 +194,9 @@ NSInteger const JSONRPCConversionErrorCode = 10;
 	if (!params || [params isKindOfClass:[NSArray class]])
 	{
 		JSONRPCResponseHandler* d = [_service callMethodWithName:methodName parameters:params];
+		[anInvocation setReturnValue:&d];
+	} else if ([params isKindOfClass:[NSDictionary class]]) {
+		JSONRPCResponseHandler* d = [_service callMethodWithName:methodName namedParameters:params];
 		[anInvocation setReturnValue:&d];
 	} else {
 		[super forwardInvocation:anInvocation];

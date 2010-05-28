@@ -48,59 +48,130 @@ static inline NSString* generateUUID() {
 @synthesize uuid = _uuid;
 @synthesize service = _service;
 
-+(id)methodCallWithMethodName:(NSString*)methodName parameters:(NSArray*)params
-{
-	return [[[JSONRPCMethodCall alloc] initWithMethodName:methodName parameters:params] autorelease];
-}
-+(id)methodCallWithMethodNameAndParams:(NSString*)methodName, ...
-{
-	va_list ap;
-	va_start(ap, methodName);
-	id ret = [[[JSONRPCMethodCall alloc] initWithMethodName:methodName parametersList:ap notifyOnly:NO] autorelease];
-	va_end(ap);
-	return ret;
-}
-+(id)notificationWithName:(NSString*)methodName parameters:(NSArray*)params
-{
-	return [[[JSONRPCMethodCall alloc] initWithMethodName:methodName parameters:params notifyOnly:YES] autorelease];
-}
 
--(id)initWithMethodName:(NSString*)methodName parameters:(NSArray*)params {
-	return [self initWithMethodName:methodName parameters:params notifyOnly:NO];
-}
--(id)initWithMethodNameAndParams:(NSString *)methodName, ...
-{	
-	va_list ap;
-	va_start(ap, methodName);
-	id ret = [self initWithMethodName:methodName parametersList:ap notifyOnly:NO];
-	va_end(ap);
-	return ret;
-}
--(id)initWithMethodName:(NSString *)methodName parametersList:(va_list)paramsList notifyOnly:(BOOL)notifyOnly
-{
-	NSMutableArray* args = [NSMutableArray array];
-	id obj;
-	while(obj = va_arg(paramsList,id)) [args addObject:obj];
-	return [self initWithMethodName:methodName parameters:args notifyOnly:notifyOnly];
-}
 
--(id)initWithMethodName:(NSString*)methodName parameters:(NSArray*)params notifyOnly:(BOOL)notifyOnly
+/////////////////////////////////////////////////////////////////////////////
+// MARK: -
+// MARK: Constructors
+/////////////////////////////////////////////////////////////////////////////
+
+-(id)initWithMethodName:(NSString*)methodName parameters:(NSArray*)params
 {
 	self = [super init];
 	if (self != nil) {
 		self.methodName = methodName;
 		self.parameters = params;
-		_uuid = notifyOnly ? nil : [generateUUID() retain];
+		_uuid = [generateUUID() retain];
 	}
 	return self;	
 }
 
+-(id)initWithMethodNameAndParams:(NSString *)methodName, ...
+{	
+	va_list ap;
+	va_start(ap, methodName);
+	id ret = [self initWithMethodName:methodName parametersList:ap];
+	va_end(ap);
+	return ret;
+}
+-(id)initWithMethodName:(NSString *)methodName parametersList:(va_list)paramsList
+{
+	NSMutableArray* args = [NSMutableArray array];
+	id obj;
+	while(obj = va_arg(paramsList,id)) [args addObject:obj];
+	return [self initWithMethodName:methodName parameters:args];
+}
+// MARK: -
+-(id)initWithMethodName:(NSString*)methodName namedParameters:(NSDictionary*)params
+{
+	self = [super init];
+	if (self != nil) {
+		self.methodName = methodName;
+		self.parameters = params;
+		_uuid = [generateUUID() retain];
+	}
+	return self;	
+}
+-(id)initWithMethodNameAndNamedParams:(NSString *)methodName, ...
+{	
+	va_list ap;
+	va_start(ap, methodName);
+	id ret = [self initWithMethodName:methodName namedParametersList:ap];
+	va_end(ap);
+	return ret;
+}
+-(id)initWithMethodName:(NSString*)methodName namedParametersList:(va_list)paramsList
+{
+	NSMutableDictionary* args = [NSMutableDictionary dictionary];
+	id obj;
+	NSString* key;
+	while(obj = va_arg(paramsList,id)) {
+		key = va_arg(paramsList,NSString*);
+		[args setObject:obj forKey:key];
+	}
+	return [self initWithMethodName:methodName namedParameters:args];
+}
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+// MARK: -
+// MARK: Commodity Constructors
+/////////////////////////////////////////////////////////////////////////////
+
++(id)methodCallWithMethodName:(NSString*)methodName parameters:(NSArray*)params
+{
+	return [[[self alloc] initWithMethodName:methodName parameters:params] autorelease];
+}
++(id)methodCallWithMethodNameAndParams:(NSString*)methodName, ...
+{
+	va_list ap;
+	va_start(ap, methodName);
+	id ret = [[[self alloc] initWithMethodName:methodName parametersList:ap] autorelease];
+	va_end(ap);
+	return ret;
+}
+// MARK: -
++(id)methodCallWithMethodName:(NSString*)methodName namedParameters:(NSDictionary*)params
+{
+	return [[[self alloc] initWithMethodName:methodName namedParameters:params] autorelease];
+}
++(id)methodCallWithMethodNameAndNamedParams:(NSString *)methodName, ... {
+	va_list ap;
+	va_start(ap, methodName);
+	id ret = [[[self alloc] initWithMethodName:methodName namedParametersList:ap] autorelease];
+	va_end(ap);
+	return ret;
+}
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+// MARK: -
+// MARK: Conversion to JSON
+/////////////////////////////////////////////////////////////////////////////
+
+
 -(id)proxyForJson {
-	return [NSDictionary dictionaryWithObjectsAndKeys:
-			_methodName,@"method",
-			((id)_parameters?:(id)[NSNull null]),@"params",
-			_uuid,@"id",
-			nil];
+	NSMutableDictionary* jsonObj = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+									_methodName,@"method",
+									((id)_parameters?:(id)[NSNull null]),@"params",
+									_uuid,@"id",
+									nil];
+	switch (self.service.version)
+	{
+		case JSONRPCVersion_1_0:
+			// no 'version' or 'jsonrpc' field for this version
+			break;
+		case JSONRPCVersion_1_1:
+			[jsonObj setObject:@"1.1" forKey:@"version"];
+			break;
+		case JSONRPCVersion_2_0:
+			[jsonObj setObject:@"2.0" forKey:@"jsonrpc"];
+			break;			
+	}
+	
+	return [NSDictionary dictionaryWithDictionary:jsonObj];
 }
 
 -(NSString*)description {
@@ -131,67 +202,4 @@ static inline NSString* generateUUID() {
 	[_service release];
 	[super dealloc];
 }
-@end
-
-
-
-
-@implementation JSONRPCMethodCall_v2_0
-+(id)methodCallWithMethodName:(NSString*)methodName namedParameters:(NSDictionary*)params
-{
-	return [[[JSONRPCMethodCall_v2_0 alloc] initWithMethodName:methodName namedParameters:params] autorelease];
-}
-+(id)methodCallWithMethodNameAndNamedParams:(NSString *)methodName, ... {
-	va_list ap;
-	va_start(ap, methodName);
-	id ret = [[[JSONRPCMethodCall_v2_0 alloc] initWithMethodName:methodName namedParametersList:ap notifyOnly:NO] autorelease];
-	va_end(ap);
-	return ret;
-}
-+(id)notificationWithName:(NSString*)methodName namedParameters:(NSDictionary*)params
-{
-	return [[[JSONRPCMethodCall alloc] initWithMethodName:methodName namedParameters:params notifyOnly:YES] autorelease];
-}
--(id)initWithMethodName:(NSString*)methodName namedParameters:(NSDictionary*)params {
-	return [self initWithMethodName:methodName namedParameters:params notifyOnly:NO];
-}
--(id)initWithMethodNameAndNamedParams:(NSString *)methodName, ...
-{	
-	va_list ap;
-	va_start(ap, methodName);
-	id ret = [self initWithMethodName:methodName namedParametersList:ap notifyOnly:NO];
-	va_end(ap);
-	return ret;
-}
--(id)initWithMethodName:(NSString*)methodName namedParametersList:(va_list)paramsList notifyOnly:(BOOL)notifyOnly
-{
-	NSMutableDictionary* args = [NSMutableDictionary dictionary];
-	id obj;
-	NSString* key;
-	while(obj = va_arg(paramsList,id)) {
-		key = va_arg(paramsList,NSString*);
-		[args setObject:obj forKey:key];
-	}
-	return [self initWithMethodName:methodName namedParameters:args  notifyOnly:notifyOnly];
-}
--(id)initWithMethodName:(NSString*)methodName namedParameters:(NSDictionary*)params notifyOnly:(BOOL)notifyOnly
-{
-	self = [super init];
-	if (self != nil) {
-		self.methodName = methodName;
-		self.parameters = params;
-		_uuid = notifyOnly ? nil : [generateUUID() retain];
-	}
-	return self;	
-}
-
--(id)proxyForJson {
-	return [NSDictionary dictionaryWithObjectsAndKeys:
-			@"2.0",@"jsonrpc",
-			_methodName,@"method",
-			((id)_parameters?:(id)[NSNull null]),@"params",
-			_uuid,@"id",
-			nil];
-}
-
 @end

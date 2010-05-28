@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<title>JSONRPC Framework: JSONRPC.h Source File</title>
+<title>JSONRPC Framework: JSONRPC_Extensions.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -22,7 +22,7 @@
       <li><a href="globals.html"><span>File&nbsp;Members</span></a></li>
     </ul>
   </div>
-<h1>JSONRPC.h</h1><a href="_j_s_o_n_r_p_c_8h.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">/*</span>
+<h1>JSONRPC_Extensions.h</h1><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">/*</span>
 <a name="l00002"></a>00002 <span class="comment"> Copyright (C) 2009 Olivier Halligon. All rights reserved.</span>
 <a name="l00003"></a>00003 <span class="comment"> </span>
 <a name="l00004"></a>00004 <span class="comment"> Redistribution and use in source and binary forms, with or without</span>
@@ -51,31 +51,24 @@
 <a name="l00027"></a>00027 <span class="comment"> OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span>
 <a name="l00028"></a>00028 <span class="comment"> */</span>
 <a name="l00029"></a>00029 
-<a name="l00030"></a>00030 <span class="preprocessor">#import &quot;<a class="code" href="_j_s_o_n_r_p_c_service_8h.html" title="Represent a JSON-RPC WebService.">JSONRPCService.h</a>&quot;</span>
-<a name="l00031"></a>00031 <span class="preprocessor">#import &quot;<a class="code" href="_j_s_o_n_r_p_c_method_call_8h.html" title="Represent a method call on a JSON-RPC WebService.">JSONRPCMethodCall.h</a>&quot;</span>
-<a name="l00032"></a>00032 <span class="preprocessor">#import &quot;<a class="code" href="_j_s_o_n_r_p_c_response_handler_8h.html" title="Utility object to configure the way to handle the response to a JSON-RPC method call...">JSONRPCResponseHandler.h</a>&quot;</span>
-<a name="l00033"></a>00033 <span class="preprocessor">#import &quot;JSONRPC_Extensions.h&quot;</span>
-<a name="l00034"></a>00034 
-<a name="l00035"></a>00035 
-<a name="l00037"></a>00037 <span class="comment">// MARK: Useful macros</span>
-<a name="l00041"></a>00041 <span class="comment"></span>
-<a name="l00043"></a><a class="code" href="_j_s_o_n_r_p_c_8h.html#acd656d301ee55725a5c64566b95aeec9">00043</a> <span class="preprocessor">#define mkArray(...) [NSArray arrayWithObjects:__VA_ARGS__,nil]</span>
-<a name="l00044"></a>00044 <span class="preprocessor"></span>
-<a name="l00045"></a><a class="code" href="_j_s_o_n_r_p_c_8h.html#a28175494c9f2d9af48456031377a37bb">00045</a> <span class="preprocessor">#define mkDict(...) [NSDictionary dictionaryWithObjectsAndKeys:__VA_ARGS__,nil]</span>
-<a name="l00046"></a>00046 <span class="preprocessor"></span>
-<a name="l00047"></a><a class="code" href="_j_s_o_n_r_p_c_8h.html#a5a3cd8f7ef27ea73ba3668bd9ef7f567">00047</a> <span class="preprocessor">#define mkInt(x) [NSNumber numberWithInt:x]</span>
-<a name="l00048"></a>00048 <span class="preprocessor"></span>
-<a name="l00049"></a><a class="code" href="_j_s_o_n_r_p_c_8h.html#a56a92257a896614798ac32a42ecdef5a">00049</a> <span class="preprocessor">#define rdInt(nsx) [nsx intValue]</span>
-<a name="l00050"></a>00050 <span class="preprocessor"></span>
-<a name="l00051"></a>00051 
-<a name="l00052"></a>00052 
+<a name="l00030"></a>00030 <span class="preprocessor">#import &lt;Foundation/Foundation.h&gt;</span>
+<a name="l00031"></a>00031 
+<a name="l00032"></a>00032 
+<a name="l00039"></a>00039 
+<a name="l00040"></a>00040 
+<a name="l00041"></a>00041 
+<a name="l00042"></a>00042 
+<a name="l00043"></a>00043 
+<a name="l00044"></a>00044 
+<a name="l00045"></a><a class="code" href="interface_n_s_error_07_j_s_o_n_08.html">00045</a> <span class="keyword">@interface </span>NSError(JSON)
+<a name="l00051"></a><a class="code" href="interface_n_s_error_07_j_s_o_n_08.html#a140392958faf3416bb70c3e133b0c0b7">00051</a> @property(nonatomic, readonly) id data;
+<a name="l00052"></a>00052 <span class="keyword">@end</span>
 <a name="l00053"></a>00053 
 <a name="l00054"></a>00054 
-<a name="l00055"></a>00055 
-<a name="l00057"></a>00057 <span class="comment">// MARK: -</span>
-<a name="l00058"></a>00058 <span class="comment">// MARK: Doxygen Documentation</span>
-<a name="l00060"></a>00060 <span class="comment"></span>
-<a name="l00061"></a>00061 
+<a name="l00061"></a><a class="code" href="interface_n_s_array_07_j_s_o_n_08.html">00061</a> <span class="keyword">@interface </span>NSArray(JSON)
+<a name="l00063"></a>00063 +(id)arrayWithJson:(NSArray *)arrayOfJsonObjects itemsClass:(Class)itemsClass;
+<a name="l00065"></a>00065 -(id)initWithJson:(NSArray *)arrayOfJsonObjects itemsClass:(Class)itemsClass;
+<a name="l00066"></a>00066 <span class="keyword">@end</span>
 </pre></div></div>
 <hr class="footer"/><address style="text-align: right;"><small>Generated on Sat May 29 00:10:58 2010 for JSONRPC Framework by&nbsp;
 <a href="http://www.doxygen.org/index.html">

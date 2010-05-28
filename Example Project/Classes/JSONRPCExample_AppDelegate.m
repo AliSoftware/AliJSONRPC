@@ -46,9 +46,11 @@
 	logView.text = [NSString stringWithFormat:@"sum of %@ = %d",mc.parameters,[result intValue]];
 }
 -(IBAction)echoMethodDemo {
-	JSONRPCService* s = [JSONRPCService serviceWithURL:[NSURL URLWithString:@"http://www.raboof.com/Projects/Jayrock/Demo.ashx"]];
+	NSURL* serviceURL = [NSURL URLWithString:@"http://www.raboof.com/Projects/Jayrock/Demo.ashx"];
+	JSONRPCService* s = [JSONRPCService serviceWithURL:serviceURL version:JSONRPCVersion_1_1];
 	s.delegate = self; // we are using the JSONRPCService's delegate here, not the one in JSONRPCResponseHandler.
-	[s callMethodWithNameAndParams:@"echo",@"Hello",nil];
+	//[s callMethodWithName:@"echo" namedParameters:mkDict(@"Hello",@"text")];
+	[s.proxy echo:mkDict(@"Hello",@"text")];
 	// the response will be handled in the current object (as s.delegate = self)
 	// in the "methodCall:didReturn:error:" method (as we will not override the "callback" of the JSONRPCResponseHandler,
 	// the default method defined in the JSONRPCDelegate @protocol will be called)
@@ -62,6 +64,13 @@
 	}
 }
 
+-(IBAction)serviceDescr {
+	[[MyWebService defaultService] getServiceDescriptionWithDelegate:self callback:@selector(methodCall:didReturnSystemDescritiption:error:)];
+}
+-(void)methodCall:(JSONRPCMethodCall*)mc didReturnSystemDescritiption:(ServiceDef*)def error:(NSError*)err {
+	NSLog(@"%@ result:%@ error:%@",mc,def,err);
+	logView.text = [NSString stringWithFormat:@"Service Definition: %@",def];
+}
 
 - (void)dealloc {
     [window release];

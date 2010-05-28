@@ -30,6 +30,7 @@
 #import "JSONRPCService.h"
 #import "JSONRPCMethodCall.h"
 #import "JSONRPCResponseHandler.h"
+#import "JSONRPC_Extensions.h"
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -65,12 +66,13 @@
  *    This framework aims to provide JSON-RPC support to your Objective-C programs.
  *    Its role is to have a simple API to query any WebService that can be called using JSON-RPC.
  *    \n
- *    This framework currently support JSON-RPC 1.0 and 2.0.
+ *    This framework currently support JSON-RPCversion  1.0, 1.1 and 2.0.
  *
  * - @subpage Overview
  *    - @subpage OverviewCreate
  *    - @subpage OverviewCall
  *    - @subpage OverviewResponse
+ *       - @subpage OverviewResultConversion
  *    - @subpage OverviewRelease
  * - @subpage ErrMgmt
  *    - @subpage ErrCatch
@@ -80,7 +82,7 @@
  ***** <hr>
  *
  * @author O.Halligon
- * @version 1.1
+ * @version 1.2
  * @date May 2010
  *
  * @note The JSON part is assured through the <a href="http://code.google.com/p/json-framework/">SBJSON</a> framework.
@@ -101,9 +103,10 @@
  *
  *
  * @section OverviewCreate Create a JSONRPCService object
- * You do this typically by passing the URL of the WebService to the init constructor:
+ * You do this typically by passing the URL of the WebService to the init constructor,
+ * specifying the JSON-RPC version supported by the WebService:
  * @code
- * JSONRPCService* service = [[JSONRPCService alloc] initWithURL:kServiceURL];
+ * JSONRPCService* service = [[JSONRPCService alloc] initWithURL:kServiceURL version:JSONRPCVersion_1_0];
  * @endcode
  *
  *
@@ -111,20 +114,25 @@
  * To do this, you have <b>multiple equivalent possibilities</b>:
  * <ul>
  *
- *   <li> Use the JSONRPCService#callMethodWithName:parameters: method,
- *       passing it the name of the method to call (an NSString) and its parameters (an NSArray)
+ *   <li> Use the JSONRPCService#callMethodWithName:parameters: or JSONRPCService#callMethodWithName:namedParameters: method,
+ *       passing it the name of the method to call (an NSString) and its parameters (an NSArray for the first case, NSDictionary for the second)
  *   </li>
  *
- *   <li> Use the JSONRPCService#callMethodWithNameAndParams: method,
+ *   <li> Use the JSONRPCService#callMethodWithNameAndParams: or JSONRPCService#callMethodWithNameAndNamedParams: method,
  *       passing it the name (NSString) of the method to call, followed by a variable number of arguments
- *       representing the parameters, terminated by 'nil'.</li>
+ *       representing the parameters, terminated by 'nil'.
+ *
+ *       This variable number of arguments are at the same format as:
+ *       - +[NSArray arrayWithObjects:] for JSONRPCService#callMethodWithNameAndParams:
+ *       - +[NSDictionary dictionaryWithObjectsAndKeys:] for JSONRPCService#callMethodWithNameAndNamedParams:
+ *   </li>
  *
  *   <li> Create a JSONRPCMethodCall object, passing it the name of the method to call and its arguments,
  *       then pass it to the JSONRPCService#callMethod: to actually call the method.
  *       (This is actually what the two previous options do in their implementation).</li>
  *
  *   <li> Ask the JSONRPCService for a proxy object (see JSONRPCService#proxy), then call directly any method you want
- *      as an Objective-C call (as if it was the WebService itself), with the arguments in an NSArray.
+ *      as an Objective-C call (as if it was the WebService itself), with the arguments in an NSArray or NSDictionary.
  *      The following 3 lines will in fact be equivalent:
  *      @code
  *        [service.proxy echo:[NSArray arrayWithObject:@"Hello there"]]
@@ -160,17 +168,13 @@
  *        [h setCallback:@selector(remoteProcedureCall:didReturnObject:serviceError:)];
  *        // at this stage, the response will be received by x through the method remoteProcedureCall:didReturnObject:serviceError:
  *	    @endcode
- *     <li> You can also set the Class you want the result to be converted into.
- *       <ul>
- *         <li> This class should respond to initWithJson: to be initialized using the JSON object</li>
- *         <li> Optionally, this class may also respond to -jsonProxy to be converted back to a JSON object if needed later (see SBJSON documentation) </li>
- *         <li> If the JSON object returned by the WebService is an array, the convertion from the JSON object to the given Class
- *          will be done on the objects in this array, so that e.g. an array of objects representing a person could be converted
- *          into an NSArray of Person objects.</li>
- *       </ul>
+ *     <li> You can also set the Class you want the result to be converted into. This way, you can receive
+ *      a custom object (e.g. your 'User' or 'ItemDetail', ... custom classes) as a response to you JSON-RPC method call,
+ *      and not only JSON objects (NSDictionary, NSArray, NSString, ...).
+ *      @see @ref OverviewResultConversion
  *     </li>
  *   </ul>
- *   Note that you can nest tje JSONRPCService method call with the JSONRPCResponseHandler calls to be more concise:
+ *   Note that you can nest the JSONRPCService method call with the JSONRPCResponseHandler calls to be more concise:
  *   @code
  *   [[service callMethodWithNameAndParams:@"echo",@"Hello there",nil]
  *    setDelegate:self callback:@selector(methodCall:didReturn:error) resultClass:[MyCustomClass class]];
@@ -179,7 +183,10 @@
  *
  * @section OverviewRelease Release the service
  * Of course don't forget to release your JSONRPCService when you are done.
- *
+ * @note JSONRPCService objects are internally retained while a request has been sent to the service
+ *  (and then automatically autoreleased when the request receive the response, avec forwarding the response to the delegate).
+ *  This way, you are not required to retain the JSONRPCService instance until you get the response (otherwise this would have
+ *   required for you to keep a reference on the JSONRPCService as an instance variable)
  *
  * @section OverviewNext Going further
  * As you can see, the usage of this framework is highly flexible. You can call a JSON-RPC method using multiple different syntaxes,
@@ -189,6 +196,118 @@
  *
  * For more information, you can look at the @ref Example.
  */
+
+/**
+ * @page OverviewResultConversion Converting the JSON response to a custom class
+ *
+ * You can make the JSON response of your remote method call be converted into the class of your choice.
+ * This is very useful to manipulate instances of your custom classes instead of only use NSDictionaries
+ *
+ * To make this possible, the class you want the JSON object to be converted to should respond to initWithJson:
+ *  to be initialized using the JSON object. (see @ref ResultConversionExample1)
+ * @note Optionally, this class may also respond to -jsonProxy to be converted back to a JSON object if needed later (see SBJSON documentation)
+ *
+ * If the JSON object returned by the WebService is an array, the convertion from the JSON object to the given Class
+ *  will be done on the objects in this array, and not on the array itself.
+ * This way, an array of objects representing e.g. a person can be converted into an NSArray of Person objects.
+ *
+ * For more complex objects, you can call initWithJson in the initWithJson method itself, and also use
+ *  arrayWithJson:itemsClass: method of the NSArray(JSON) category (JSONRPC_Extensions.h). See @ref ResultConversionExample2
+ *
+ * <hr>
+ * @section ResultConversionExample1 Simple example
+ *
+ * As an example, to handle JSON objects representing a person with fields "firstname" and "lastname":
+ * @code {
+ *    firstname: "John",
+ *    lastname: "Doe"
+ * }@endcode
+ * Then you can define an "Person" Objective-C class (to convert those JSON objects) like this:
+ * @code
+ * @interface Person : NSObject {
+ *   NSString* firstName;
+ *   NSString* lastName;
+ * }
+ * @property(nonatomic, retain) NSString* firstName;
+ * @property(nonatomic, retain) NSString* lastName;
+ * -(id)initWithJson:(NSDictionary*)json;
+ * @endcode
+ * @code
+ * @implementation Perso
+ * @synthesize firstName, lastName;
+ * -(id)initWithJson:(NSDictionary*)json {
+ *   if (self = [super init]) {
+ *     self.firstName = [json objectForKey:@"firstname"];
+ *     self.lastName = [json objectForKey:@"lastname"];
+ *   }
+ *   return self;
+ * }
+ * -(void)dealloc {
+ *   [firstName release];
+ *   [lastName release];
+ *   [super dealloc];
+ * }
+ * @endcode
+ *
+ * Then, if you have a JSON-RPC method that returns a JSON representation of a person as a result, you can call it this way:
+ * @code
+ * [[service callMethodWithName:@"getAPerson" parameters:nil] setResultClass:[Person class]];
+ * @endcode
+ * And when the delegate method will be called, a Person instance, constructed from the returned JSON, will be passed as the second parameter:
+ * @code
+ * -(void)methodCall:(JSONRPCMethodCall*)mc didReturn:(Person*)person error:(NSError*)error {
+ *   // handle the Person object here
+ * }
+ * @endcode
+ *
+ * <hr>
+ *
+ * @section ResultConversionExample2 More complex example
+ * If the JSON object returned by the WebService is more complex, you can call initWithJson (on other classes) from your initWithJson implementation
+ *  and even use the -[NSArray initWithJson:itemsClass:] or +[NSArray arrayWithJson:itemsClass:] methods of the NSArray category to build complex instances.
+ *
+ * For example, image your WebService also return a JSON object representing a family, like this:
+ * @code {
+ *   father: { firstname:"John", lastname:"Doe" },
+ *   mother: { firstname:"Jane", lastname:"Doe" },
+ *   children: [ { firstname:"John Jr", lastname:"Doe" }, { firstname:"Jane Jr", lastname:"Doe" }]
+ * } @endcode
+ * In this example, the object representing a family is itself composed of objects representing persons.
+ * If you want to create a "Family" Objective-C class to represent such object, you can implement it this way:
+ * @code
+ * @interface Family : NSObject {
+ *   Person* father;
+ *   Person* mother;
+ *   NSArray* children;
+ * }
+ * @property(nonatomic, retain) Person* father;
+ * @property(nonatomic, retain) Person* mother;
+ * @property(nonatomic, retain) NSArray* children;
+ * -(id)initWithJson:(NSDictionary*)json;
+ * @end
+ * @endcode
+ * @code
+ * @implementation Family
+ * @synthesize father, mother, children;
+ * -(id)initWithJson:(NSDictionary*)json {
+ *   if (self = [super init]) {
+ *     self.father = [[[Person alloc] initWithson:[json objectForKey:@"father"]] autorelease];
+ *     self.mother = [[[Person alloc] initWithson:[json objectForKey:@"mother"]] autorelease];
+ *     self.children = [[[NSArray alloc] initWithson:[json objectForKey:@"children"] itemsClass:[Person class]] autorelease];
+ *   }
+ *   return self;
+ * }
+ * -(void)dealloc {
+ *   [father release];
+ *   [mother release];
+ *   [children release];
+ *   [super dealloc];
+ * }
+ * @end
+ * @endcode
+ */
+
+
 
 
 /**
@@ -283,7 +402,7 @@
  *     @implementation TestClass
  *     -(void)testIt
  *     {
- *       JSONRPCService* service = [[[JSONRPCService alloc] initWithURL:kServiceURL] autorelease];
+ *       JSONRPCService* service = [[[JSONRPCService alloc] initWithURL:kServiceURL version:JSONRPCVersion_1_0] autorelease];
  *
  *       [[service callMethodWithNameAndParams:@"getUserDetails",@"user1234",nil]
  *        setDelegate:self callback:@selector(methodCall:didReturnUser:error:) resultClass:[Person class]];

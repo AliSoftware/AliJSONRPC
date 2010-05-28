@@ -16,16 +16,19 @@
 }
 + (MyWebService*)defaultService;
 
-// -(void)methodCall:didReturnAuthor:(Person*)user error:(NSError*)error;
+// -(void)methodCall:(JSONRPCMethodCall*)mc didReturnAuthor:(Person*)user error:(NSError*)error;
 -(void)getAuthorWithDelegate:(id)delegate callback:(SEL)callback;
 
-// -(void)methodCall:didReturnCouple:(Couple*)user error:(NSError*)error;
+// -(void)methodCall:(JSONRPCMethodCall*)mc didReturnCouple:(Couple*)user error:(NSError*)error;
 -(void)getCoupleWithDelegate:(id)delegate callback:(SEL)callback;
 
-// -(void)methodCall:didReturnSum:(NSNumber*)user error:(NSError*)error;
+// -(void)methodCall:(JSONRPCMethodCall*)mc didReturnSum:(NSNumber*)user error:(NSError*)error;
 -(void)addValue:(int)val1 withValue:(int)val2 delegate:(id)delegate callback:(SEL)callback;
 
-// -(void)methodCall:didReturnSum:(NSNumber*)user error:(NSError*)error;
+// -(void)methodCall:(JSONRPCMethodCall*)mc didReturnSum:(NSNumber*)user error:(NSError*)error;
 -(void)getSumOfValues:(NSArray*)values delegate:(id)delegate callback:(SEL)callback;
+
+// -(void)methodCall:(JSONRPCMethodCall*)mc didReturnDef:(ServiceDef*)def error:(NSError*)error;
+-(void)getServiceDescriptionWithDelegate:(id)delegate callback:(SEL)callback;
 @end
 

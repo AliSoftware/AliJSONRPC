@@ -54,62 +54,63 @@
 <a name="l00030"></a>00030 <span class="preprocessor">#import &lt;Foundation/Foundation.h&gt;</span>
 <a name="l00031"></a>00031 
 <a name="l00034"></a>00034 
-<a name="l00035"></a>00035 <span class="keyword">@class</span> <a class="code" href="interface_j_s_o_n_r_p_c_service.html" title="The class representing a JSON-RPC WebService (identified by an URL to call methods...">JSONRPCService</a>;
+<a name="l00035"></a>00035 <span class="preprocessor">#import &quot;<a class="code" href="_j_s_o_n_r_p_c_service_8h.html" title="Represent a JSON-RPC WebService.">JSONRPCService.h</a>&quot;</span>;
 <a name="l00036"></a>00036 
-<a name="l00038"></a>00038 <span class="comment">// MARK: -</span>
-<a name="l00039"></a>00039 <span class="comment">// MARK: JSON-RPC v1.0</span>
-<a name="l00041"></a>00041 <span class="comment"></span>
-<a name="l00049"></a><a class="code" href="interface_j_s_o_n_r_p_c_method_call.html">00049</a> <span class="keyword">@interface </span><a class="code" href="interface_j_s_o_n_r_p_c_method_call.html" title="This class represent a method call on a JSON-RPC WebService.">JSONRPCMethodCall</a> : NSObject
-<a name="l00050"></a>00050 {
-<a name="l00052"></a>00052         NSString* _methodName;
-<a name="l00053"></a>00053         <span class="keywordtype">id</span> _parameters;
-<a name="l00054"></a>00054         NSString* _uuid;
-<a name="l00055"></a>00055         
-<a name="l00056"></a>00056         <a class="code" href="interface_j_s_o_n_r_p_c_service.html" title="The class representing a JSON-RPC WebService (identified by an URL to call methods...">JSONRPCService</a>* _service; 
-<a name="l00057"></a>00057 }
-<a name="l00058"></a><a class="code" href="interface_j_s_o_n_r_p_c_method_call.html#afe016de248dcbf86d4ef72bed72c6d83">00058</a> @property(nonatomic, retain) NSString* methodName; 
-<a name="l00059"></a><a class="code" href="interface_j_s_o_n_r_p_c_method_call.html#a4a786b0a782c1ab76460616e301d8d14">00059</a> @property(nonatomic, retain) <span class="keywordtype">id</span> parameters; 
-<a name="l00060"></a><a class="code" href="interface_j_s_o_n_r_p_c_method_call.html#abecfeb8396d8adf522e09ae7e00124ce">00060</a> @property(nonatomic, retain, readonly) NSString* uuid; 
-<a name="l00061"></a>00061 
-<a name="l00066"></a><a class="code" href="interface_j_s_o_n_r_p_c_method_call.html#ab9a5fb09bb0c3403e8366711e075e181">00066</a> @property(nonatomic, retain) <a class="code" href="interface_j_s_o_n_r_p_c_service.html" title="The class representing a JSON-RPC WebService (identified by an URL to call methods...">JSONRPCService</a>* service;
-<a name="l00067"></a>00067 
-<a name="l00069"></a>00069 +(<span class="keywordtype">id</span>)methodCallWithMethodName:(NSString*)methodName parameters:(NSArray*)params;
-<a name="l00071"></a>00071 +(<span class="keywordtype">id</span>)methodCallWithMethodNameAndParams:(NSString *)methodName, ... NS_REQUIRES_NIL_TERMINATION;
-<a name="l00073"></a>00073 +(<span class="keywordtype">id</span>)notificationWithName:(NSString*)methodName parameters:(NSArray*)params; 
-<a name="l00074"></a>00074 
-<a name="l00080"></a>00080 -(<span class="keywordtype">id</span>)initWithMethodName:(NSString*)methodName parameters:(NSArray*)params; <span class="comment">// notifyOnly=NO</span>
-<a name="l00087"></a>00087 <span class="comment"></span>-(<span class="keywordtype">id</span>)initWithMethodNameAndParams:(NSString *)methodName, ... NS_REQUIRES_NIL_TERMINATION;
-<a name="l00088"></a>00088 
-<a name="l00089"></a>00089 -(<span class="keywordtype">id</span>)initWithMethodName:(NSString *)methodName parametersList:(va_list)paramsList notifyOnly:(BOOL)notifyOnly; 
+<a name="l00044"></a><a class="code" href="interface_j_s_o_n_r_p_c_method_call.html">00044</a> <span class="keyword">@interface </span><a class="code" href="interface_j_s_o_n_r_p_c_method_call.html" title="This class represent a method call on a JSON-RPC WebService.">JSONRPCMethodCall</a> : NSObject
+<a name="l00045"></a>00045 {
+<a name="l00047"></a>00047         NSString* _methodName;
+<a name="l00048"></a>00048         <span class="keywordtype">id</span> _parameters;
+<a name="l00049"></a>00049         NSString* _uuid;
+<a name="l00050"></a>00050         
+<a name="l00051"></a>00051         <a class="code" href="interface_j_s_o_n_r_p_c_service.html" title="The class representing a JSON-RPC WebService (identified by an URL to call methods...">JSONRPCService</a>* _service; 
+<a name="l00052"></a>00052 }
+<a name="l00053"></a><a class="code" href="interface_j_s_o_n_r_p_c_method_call.html#afe016de248dcbf86d4ef72bed72c6d83">00053</a> @property(nonatomic, retain) NSString* methodName; 
+<a name="l00054"></a><a class="code" href="interface_j_s_o_n_r_p_c_method_call.html#a4a786b0a782c1ab76460616e301d8d14">00054</a> @property(nonatomic, retain) <span class="keywordtype">id</span> parameters; 
+<a name="l00055"></a><a class="code" href="interface_j_s_o_n_r_p_c_method_call.html#abecfeb8396d8adf522e09ae7e00124ce">00055</a> @property(nonatomic, retain, readonly) NSString* uuid; 
+<a name="l00056"></a>00056 
+<a name="l00061"></a><a class="code" href="interface_j_s_o_n_r_p_c_method_call.html#ab9a5fb09bb0c3403e8366711e075e181">00061</a> @property(nonatomic, retain) <a class="code" href="interface_j_s_o_n_r_p_c_service.html" title="The class representing a JSON-RPC WebService (identified by an URL to call methods...">JSONRPCService</a>* service;
+<a name="l00062"></a>00062 
+<a name="l00063"></a>00063 
+<a name="l00065"></a>00065 <span class="comment">// MARK: -</span>
+<a name="l00066"></a>00066 <span class="comment">// MARK: Constructors</span>
+<a name="l00068"></a>00068 <span class="comment"></span>
+<a name="l00069"></a>00069 
+<a name="l00074"></a>00074 -(<span class="keywordtype">id</span>)initWithMethodName:(NSString*)methodName parameters:(NSArray*)params;
+<a name="l00075"></a>00075 
+<a name="l00081"></a>00081 -(<span class="keywordtype">id</span>)initWithMethodNameAndParams:(NSString *)methodName, ... NS_REQUIRES_NIL_TERMINATION;
+<a name="l00082"></a>00082 
+<a name="l00083"></a>00083 -(<span class="keywordtype">id</span>)initWithMethodName:(NSString *)methodName parametersList:(va_list)paramsList; 
+<a name="l00084"></a>00084 
+<a name="l00089"></a>00089 -(<span class="keywordtype">id</span>)initWithMethodName:(NSString*)methodName namedParameters:(NSDictionary*)params;
 <a name="l00090"></a>00090 
-<a name="l00097"></a>00097 -(<span class="keywordtype">id</span>)initWithMethodName:(NSString*)methodName parameters:(NSArray*)params notifyOnly:(BOOL)notifyOnly;
+<a name="l00097"></a>00097 -(<span class="keywordtype">id</span>)initWithMethodNameAndNamedParams:(NSString *)methodName, ... NS_REQUIRES_NIL_TERMINATION;
 <a name="l00098"></a>00098 
-<a name="l00099"></a>00099 -(<span class="keywordtype">id</span>)proxyForJson; 
-<a name="l00100"></a>00100 @end
+<a name="l00099"></a>00099 -(<span class="keywordtype">id</span>)initWithMethodName:(NSString*)methodName namedParametersList:(va_list)paramsList; 
+<a name="l00100"></a>00100 
 <a name="l00101"></a>00101 
 <a name="l00102"></a>00102 
 <a name="l00103"></a>00103 
-<a name="l00104"></a>00104 
-<a name="l00105"></a>00105 
-<a name="l00106"></a>00106 
-<a name="l00108"></a>00108 <span class="comment">// MARK: -</span>
-<a name="l00109"></a>00109 <span class="comment">// MARK: JSON-RPC v2.0</span>
-<a name="l00111"></a>00111 <span class="comment"></span>
-<a name="l00112"></a>00112 
-<a name="l00114"></a><a class="code" href="interface_j_s_o_n_r_p_c_method_call__v2__0.html">00114</a> @interface <a class="code" href="interface_j_s_o_n_r_p_c_method_call__v2__0.html" title="This class is a subclass of JSONRPCMethodCall that handle JSON-RPC v2.0 method call...">JSONRPCMethodCall_v2_0</a> : <a class="code" href="interface_j_s_o_n_r_p_c_method_call.html" title="This class represent a method call on a JSON-RPC WebService.">JSONRPCMethodCall</a>
-<a name="l00116"></a>00116 +(<span class="keywordtype">id</span>)methodCallWithMethodName:(NSString*)methodName namedParameters:(NSDictionary*)params;
-<a name="l00118"></a>00118 +(<span class="keywordtype">id</span>)methodCallWithMethodNameAndNamedParams:(NSString *)methodName, ... NS_REQUIRES_NIL_TERMINATION;
-<a name="l00120"></a>00120 +(<span class="keywordtype">id</span>)notificationWithName:(NSString*)methodName namedParameters:(NSDictionary*)params;
+<a name="l00105"></a>00105 <span class="comment">// MARK: -</span>
+<a name="l00106"></a>00106 <span class="comment">// MARK: Commodity Constructors</span>
+<a name="l00108"></a>00108 <span class="comment"></span>
+<a name="l00110"></a>00110 +(<span class="keywordtype">id</span>)methodCallWithMethodName:(NSString*)methodName parameters:(NSArray*)params;
+<a name="l00112"></a>00112 +(<span class="keywordtype">id</span>)methodCallWithMethodNameAndParams:(NSString *)methodName, ... NS_REQUIRES_NIL_TERMINATION;
+<a name="l00113"></a>00113 
+<a name="l00115"></a>00115 +(<span class="keywordtype">id</span>)methodCallWithMethodName:(NSString*)methodName namedParameters:(NSDictionary*)params;
+<a name="l00117"></a>00117 +(<span class="keywordtype">id</span>)methodCallWithMethodNameAndNamedParams:(NSString *)methodName, ... NS_REQUIRES_NIL_TERMINATION;
+<a name="l00118"></a>00118 
+<a name="l00119"></a>00119 
+<a name="l00120"></a>00120 
 <a name="l00121"></a>00121 
-<a name="l00127"></a>00127 -(<span class="keywordtype">id</span>)initWithMethodName:(NSString*)methodName namedParameters:(NSDictionary*)params; <span class="comment">// notifyOnly=NO</span>
-<a name="l00135"></a>00135 <span class="comment"></span>-(<span class="keywordtype">id</span>)initWithMethodNameAndNamedParams:(NSString *)methodName, ... NS_REQUIRES_NIL_TERMINATION;
-<a name="l00136"></a>00136 
-<a name="l00137"></a>00137 -(<span class="keywordtype">id</span>)initWithMethodName:(NSString*)methodName namedParametersList:(va_list)paramsList notifyOnly:(BOOL)notifyOnly; 
-<a name="l00138"></a>00138 
-<a name="l00145"></a>00145 -(<span class="keywordtype">id</span>)initWithMethodName:(NSString*)methodName namedParameters:(NSDictionary*)params notifyOnly:(BOOL)notifyOnly;
-<a name="l00146"></a>00146 @end
+<a name="l00123"></a>00123 <span class="comment">// MARK: -</span>
+<a name="l00124"></a>00124 <span class="comment">// MARK: Conversion to JSON</span>
+<a name="l00126"></a>00126 <span class="comment"></span>
+<a name="l00127"></a>00127 
+<a name="l00128"></a>00128 -(<span class="keywordtype">id</span>)proxyForJson; 
+<a name="l00129"></a>00129 @end
+<a name="l00130"></a>00130 
 </pre></div></div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Thu May 27 23:03:40 2010 for JSONRPC Framework by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat May 29 00:10:58 2010 for JSONRPC Framework by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

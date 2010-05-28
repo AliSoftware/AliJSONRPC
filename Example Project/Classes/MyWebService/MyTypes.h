@@ -46,3 +46,23 @@ typedef NSInteger FourSquareID;
 @property(nonatomic, readonly) Person* wife;
 @end
 
+
+/////////////////////////////////////////////////////////////////////////////
+// MARK: -
+// MARK: ServiceDef
+/////////////////////////////////////////////////////////////////////////////
+
+@interface ServiceDef : ValueObject
+@property(nonatomic, readonly) NSString* objectName;
+@property(nonatomic, readonly) NSURL* serviceURL;
+@property(nonatomic, readonly) NSArray* methods;
+@end
+
+@interface MethodDef : ValueObject
+@property(nonatomic, readonly) NSString* name;
+@property(nonatomic, readonly) NSArray* parameters;
+@end
+
+@interface ParamDef : ValueObject
+@property(nonatomic, readonly) NSString* name;
+@end

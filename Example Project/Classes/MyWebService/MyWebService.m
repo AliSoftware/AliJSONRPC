@@ -38,6 +38,11 @@
 	 setDelegate:delegate callback:callback];
 }
 
+-(void)getServiceDescriptionWithDelegate:(id)delegate callback:(SEL)callback
+{
+	[[service callMethodWithName:@"system.smd" parameters:nil]
+	 setDelegate:delegate callback:callback resultClass:[ServiceDef class]];
+}
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -82,7 +87,7 @@ static MyWebService* _sharedInstance = nil;
 {
 	self = [super init];
 	if (self != nil) {
-		service = [[JSONRPCService alloc] initWithURL:[NSURL URLWithString:SERVICE_URL]];
+		service = [[JSONRPCService alloc] initWithURL:[NSURL URLWithString:SERVICE_URL] version:JSONRPCVersion_1_1];
 		service.delegate = self; // for errors catching
 		
 	}

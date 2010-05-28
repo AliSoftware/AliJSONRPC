@@ -21,6 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		094AAF2E11B05E16008591FE /* JSONRPC_Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 094AAE5311AF352F008591FE /* JSONRPC_Extensions.m */; };
 		09CC3C7411A5CA2100FF37A6 /* MyTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 09CC3C7011A5CA2100FF37A6 /* MyTypes.m */; };
 		09CC3C7511A5CA2100FF37A6 /* MyWebService.m in Sources */ = {isa = PBXBuildFile; fileRef = 09CC3C7211A5CA2100FF37A6 /* MyWebService.m */; };
 		09DA3D6A11A705C200B98E56 /* NSObject+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 09DA3D5711A705C200B98E56 /* NSObject+SBJSON.m */; };
@@ -41,6 +42,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		094AAE5211AF352F008591FE /* JSONRPC_Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONRPC_Extensions.h; sourceTree = "<group>"; };
+		094AAE5311AF352F008591FE /* JSONRPC_Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONRPC_Extensions.m; sourceTree = "<group>"; };
 		09CC3C6F11A5CA2100FF37A6 /* MyTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyTypes.h; sourceTree = "<group>"; };
 		09CC3C7011A5CA2100FF37A6 /* MyTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyTypes.m; sourceTree = "<group>"; };
 		09CC3C7111A5CA2100FF37A6 /* MyWebService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyWebService.h; sourceTree = "<group>"; };
@@ -146,6 +149,8 @@
 			isa = PBXGroup;
 			children = (
 				09DA3D6311A705C200B98E56 /* JSONRPC.h */,
+				094AAE5211AF352F008591FE /* JSONRPC_Extensions.h */,
+				094AAE5311AF352F008591FE /* JSONRPC_Extensions.m */,
 				09DA3D6411A705C200B98E56 /* JSONRPCMethodCall.h */,
 				09DA3D6511A705C200B98E56 /* JSONRPCMethodCall.m */,
 				09DA3D6611A705C200B98E56 /* JSONRPCResponseHandler.h */,
@@ -289,6 +294,7 @@
 				09DA3D7011A705C200B98E56 /* JSONRPCMethodCall.m in Sources */,
 				09DA3D7111A705C200B98E56 /* JSONRPCResponseHandler.m in Sources */,
 				09DA3D7211A705C200B98E56 /* JSONRPCService.m in Sources */,
+				094AAF2E11B05E16008591FE /* JSONRPC_Extensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

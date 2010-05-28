@@ -71,45 +71,55 @@ NSString* const JSONRPCErrorClassNameKey; //!< the key used in NSError's userInf
 
 
 
-/** @brief Category to easily retrieve the 'data' member of the error object
- *
- * This only has a meaning if this error object conforms to
- * <a href="http://groups.google.com/group/json-rpc/web/json-rpc-2-0">the JSON-RPC 2.0
- * specification, paragraph 5.1</a>, e.g. the object in the 'error' member of the WebService's response
- * is a JSON object with three fields: */
-//! @code
-//! {
-//!   code: /* a Number that indicates the error type that occurred */,
-//!   message: /* a String providing a short description of the error */,
-//!   data: /* A Primitive or Structured value that contains additional information about the error. The value of this member is defined by the Server */
-//! } @endcode 
-@interface NSError(JSON)
-/** @brief return the 'data' member of the JSON-RPC error when an error is returned by the WebService.
- *
- * This returns the 'data' key of the NSDictionary corresponding to the JSONRPCErrorJSONObjectKey of the userInfo dictionary.
- * This this userInfo key does not exist, is not an NSDictionary or does not contain this 'data' key, this returns nil.
- */
-@property(nonatomic, readonly) id data;
-@end
-
-
 /////////////////////////////////////////////////////////////////////////////
 // MARK: -
-// MARK: JSON-RPC v1.0
+// MARK: JSON-RPC Service
 /////////////////////////////////////////////////////////////////////////////
+
+//! Used to specify the JSON-RPC version supported by the WebService
+typedef enum {
+	JSONRPCVersion_1_0,
+	JSONRPCVersion_1_1,
+	JSONRPCVersion_2_0
+} JSONRPCVersion;
+
 
 //! The class representing a JSON-RPC WebService (identified by an URL to call methods to). It handle JSON-RPC v1.0 WebServices.
 @interface JSONRPCService : NSObject {
 	//! @privatesection
 	NSURL* _serviceURL;
+	JSONRPCVersion _version;
 	NSObject<JSONRPCDelegate>* delegate;
 }
 @property(nonatomic, retain) NSURL* serviceURL; //!< The URL to forward JSONRPC method calls to.
+@property(nonatomic, assign) JSONRPCVersion version; //!< The JSON-RPC version supported by the WebService
 @property(nonatomic, assign) NSObject<JSONRPCDelegate>* delegate; //!< Object to handle errors if not handled by JSONRPCResponseHandler#delegate .
 @property(nonatomic, readonly) id proxy; //!< A proxy object on which you can call any Obj-C message (without any param or with an NSArray as a parameter), and which will be forwarded as a JSONRPC method call.
 
-+(id)serviceWithURL:(NSURL*)url; //!< Commodity constructor @param url the URL of the WebService.
--(id)initWithURL:(NSURL*)url; //!< Designed initializer @param url the URL of the WebService.
+
+
+/////////////////////////////////////////////////////////////////////////////
+// MARK: -
+// MARK: Constructors
+/////////////////////////////////////////////////////////////////////////////
+
+/** Commodity constructor
+ * @param url the URL of the WebService.
+ * @param version the JSON-RPC version supported by the WebService
+ */
++(id)serviceWithURL:(NSURL*)url version:(JSONRPCVersion)version;
+/** Designed initializer
+ * @param url the URL of the WebService.
+ * @param version the JSON-RPC version supported by the WebService
+ */
+-(id)initWithURL:(NSURL*)url version:(JSONRPCVersion)version;
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+// MARK: -
+// MARK: Calling a Procedure
+/////////////////////////////////////////////////////////////////////////////
 
 /** @brief Designed method to call a JSON-RPC method on the WebService.
  * @param methodCall the JSONRPCMethodCall to call
@@ -121,6 +131,7 @@ NSString* const JSONRPCErrorClassNameKey; //!< the key used in NSError's userInf
  * @param params the array of parameters to pass to the method call
  * @return a JSONRPCResponseHandler object that allows you to define a delegate, callback and resultClass to use upon the WebService's response.
  */
+// MARK: -
 - (JSONRPCResponseHandler*)callMethodWithName:(NSString *)methodName parameters:(NSArray*)params;
 /** @brief Commodity method to call a JSON-RPC method on the WebService.
  * @param methodName the name of the method to call on the WebService
@@ -128,23 +139,7 @@ NSString* const JSONRPCErrorClassNameKey; //!< the key used in NSError's userInf
  * @return a JSONRPCResponseHandler object that allows you to define a delegate, callback and resultClass to use upon the WebService's response.
  */
 - (JSONRPCResponseHandler*)callMethodWithNameAndParams:(NSString *)methodName, ... NS_REQUIRES_NIL_TERMINATION;
-/** @brief Commodity method to send a JSON-RPC notification on the WebService.
- *  @note A notification (in the JSON-RPC context) is the same as a method call, except that it does not expect any response from the server.
- * @param methodName the name of the method to call on the WebService
- * @param params the array of parameters to pass to the method call
- */
-- (void)sendNotificationWithName:(NSString *)methodName parameters:(NSArray*)params;
-@end
 
-
-
-/////////////////////////////////////////////////////////////////////////////
-// MARK: -
-// MARK: JSON-RPC v2.0
-/////////////////////////////////////////////////////////////////////////////
-
-//! @brief This class is a subclass of JSONRPCService that handle JSON-RPC v2.0 services
-@interface JSONRPCService_v2_0 : JSONRPCService
 /** @brief Commodity method to call a JSON-RPC method on the WebService.
  * @param methodName the name of the method to call on the WebService
  * @param params the dictionary of named parameters to pass to the method call
@@ -159,12 +154,6 @@ NSString* const JSONRPCErrorClassNameKey; //!< the key used in NSError's userInf
  * @return a JSONRPCResponseHandler object that allows you to define a delegate, callback and resultClass to use upon the WebService's response.
  */
 - (JSONRPCResponseHandler*)callMethodWithNameAndNamedParams:(NSString *)methodName, ... NS_REQUIRES_NIL_TERMINATION;
-/** @brief Commodity method to send a JSON-RPC notification on the WebService.
- *  @note A notification (in the JSON-RPC context) is the same as a method call, except that it does not expect any response from the server.
- * @param methodName the name of the method to call on the WebService
- * @param params the array of parameters to pass to the method call
- */
-- (void)sendNotificationWithName:(NSString *)methodName namedParameters:(NSDictionary*)params;
 @end
 
 
