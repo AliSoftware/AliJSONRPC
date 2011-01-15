@@ -45,8 +45,13 @@
 #define mkDict(...) [NSDictionary dictionaryWithObjectsAndKeys:__VA_ARGS__,nil]
 //! Commodity macro to create an NSNumber from an int
 #define mkInt(x) [NSNumber numberWithInt:x]
+//! Commodity macro to create an NSNumber from a float
+#define mkFloat(x) [NSNumber numberWithFloat:x]
 //! Commodity macro to extract an int from an NSNumber
 #define rdInt(nsx) [nsx intValue]
+//! Commodity macro to extract a float from an NSNumber
+#define rdFloat(nsx) [nsx floatValue]
+
 
 
 
