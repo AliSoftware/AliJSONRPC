@@ -40,7 +40,7 @@
 
 -(void)getServiceDescriptionWithDelegate:(id)delegate callback:(SEL)callback
 {
-	[[service callMethodWithName:@"system.smd" parameters:nil]
+	[[service callMethodWithNameAndParams:@"system.smd",[NSNull null],nil]
 	 setDelegate:delegate callback:callback resultClass:[ServiceDef class]];
 }
 

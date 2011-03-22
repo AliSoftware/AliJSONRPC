@@ -322,17 +322,17 @@
  *
  * @subsection ErrCatch1 Internal errors
  
- * When an internal error occur (network error, JSON parsing error, failed to convert to expected class, ...),
+ * When an internal/connection error occur (network error, JSON parsing error, failed to convert to expected class, ...),
  * the JSONRPCResponseHandler will forward the error in the following order:
- *  - try to call @ref JSONRPCDelegate "methodCall:didFailWithError:" on the JSONRPCResponseHandler 's delegate
+ *  - try to call @ref JSONRPCDelegate "methodCall:shouldForwardConnectionError:" on the JSONRPCResponseHandler 's delegate
  *    (i.e. on the object that expect to receive the response)
- *  - if it does not respond, or respond and return YES, we try to call @ref JSONRPCDelegate "methodCall:didFailWithError:"
+ *  - if it does not respond, or respond and return YES, we try to call @ref JSONRPCDelegate "methodCall:shouldForwardConnectionError:"
  *    on the JSONRPCService 's delegate
  *
- * This way, if you don't implement @ref JSONRPCDelegate "methodCall:didFailWithError:" in the delegate object that expect the response,
+ * This way, if you don't implement @ref JSONRPCDelegate "methodCall:shouldForwardConnectionError:" in the delegate object that expect the response,
  *  it will fall back to the implementation of the JSONRPCService's delegate to handle generic cases (which typically display an alert or something).
  *
- * If you want to catch the error on specific cases, you still can implement @ref JSONRPCDelegate "methodCall:didFailWithError:" in the
+ * If you want to catch the error on specific cases, you still can implement @ref JSONRPCDelegate "methodCall:shouldForwardConnectionError:" in the
  *  JSONRPCResponseHandler's delegate object to catch it. At this point, you can return YES to still execute the default behavior
  *  (the one in your JSONRPCService's delegate implementation) or return NO to avoid forwarding the error.
  *
@@ -346,7 +346,7 @@
  *
  * @section ErrCodes The different error cases and their error domains
  * 
- * @subsection ErrCodes1 Internal errors ("methodCall:didFailWithError:")
+ * @subsection ErrCodes1 Internal errors ("methodCall:shouldForwardConnectionError:")
  * This method can receive these kinds of errors:<ul>
  *
  * <li>Network error (Domain NSURLErrorDomain)</li>
@@ -356,9 +356,13 @@
  *   <li>key NSUnderlyingErrorKey : contains an underlying error if any</li>
  * </ul></li>
  * 
- * <li>JSON-to-Object Conversion error or internal errors (Domain JSONRPCInternalErrorDomain), whose userInfo dictionary contains the following keys:<ul>
- *   <li>key JSONRPCErrorJSONObjectKey : the JSON object we tried to convert</li>
+ * <li>JSON-to-Object Conversion error or internal errors (Domain JSONRPCInternalErrorDomain), whose userInfo dictionary may contain the following keys:<ul>
+ *   <li>key JSONRPCErrorJSONObjectKey : the JSON object we tried to convert/process</li>
  *   <li>key JSONRPCErrorClassNameKey : the name of the class we tried to convert to</li>
+ * </ul>
+ * For now, the JSONRPCInternalErrorDomain domain contains two error codes :<ul>
+ *   <li>JSONRPCFormatErrorCode: this code corresponds to an unexpected JSON received by the server, especially if the returned JSON does not conforms to the JSON-RPC specification</li>
+ *   <li>JSONRPCConversionErrorCode: this code correspond to an error while converting the JSON object to the resultClass provided to the JSONRPCResponseHandler</li>
  * </ul></li>
  *
  * </ul>
@@ -423,10 +427,10 @@
  *       if (error) NSLog(@"error in method call: %@",err);
  *     }
  *
- *     -(BOOL)methodCall:(JSONRPCMethodCall*)meth didFailWithError:(NSError*)err
+ *     -(BOOL)methodCall:(JSONRPCMethodCall*)meth shouldForwardConnectionError:(NSError*)err
  *     {
  *       // handle the NSError (network error / no connection, etc.)
- *       return NO; // don't call methodCall:didFailWithError: on the JSONRPCService's delegate.
+ *       return NO; // don't call methodCall:shouldForwardConnectionError: on the JSONRPCService's delegate.
  *     }
  *     @end
  *     @endcode

@@ -34,10 +34,14 @@
 #import "JSONRPCResponseHandler.h"
 
 NSString* const JSONRPCServerErrorDomain = @"JSONRPCServerError";
+NSString* const JSONRPCServerErrorNotification = @"JSONRPCServerErrorNotification";
 NSString* const JSONRPCInternalErrorDomain = @"JSONRPCInternalError";
 NSString* const JSONRPCErrorJSONObjectKey = @"JSONObject";
 NSString* const JSONRPCErrorClassNameKey = @"className";
+NSInteger const JSONRPCFormatErrorCode = 8;
+NSString* const JSONRPCFormatErrorString = @"Server JSON-RPC response invalid : expected dictionary ({id,result,error})";
 NSInteger const JSONRPCConversionErrorCode = 10;
+NSString* const JSONRPCConversionErrorString = @"Error while converting received JSON data to requested resultClass";
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -92,7 +96,10 @@ NSInteger const JSONRPCConversionErrorCode = 10;
 // MARK: Call a RPC method
 /////////////////////////////////////////////////////////////////////////////
 
-- (JSONRPCResponseHandler*)callMethod:(JSONRPCMethodCall*)methodCall
+- (JSONRPCResponseHandler*)callMethod:(JSONRPCMethodCall*)methodCall {
+	return [self callMethod:methodCall reuseResponseHandler:nil];
+}
+- (JSONRPCResponseHandler*)callMethod:(JSONRPCMethodCall*)methodCall reuseResponseHandler:(JSONRPCResponseHandler*)responseHandler
 {
 	methodCall.service = self;
 	NSString* jsonStr = [[methodCall proxyForJson] JSONRepresentation];
@@ -107,9 +114,10 @@ NSInteger const JSONRPCConversionErrorCode = 10;
 	[req setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
 	[req setValue:@"application/json" forHTTPHeaderField:@"Accept"];
 	
-	JSONRPCResponseHandler* d = [[[JSONRPCResponseHandler alloc] init] autorelease];
+	JSONRPCResponseHandler* d = responseHandler ?: [[[JSONRPCResponseHandler alloc] init] autorelease];
 	d.methodCall = methodCall;
 	[NSURLConnection connectionWithRequest:req delegate:d];
+	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 	return d;
 	
 }

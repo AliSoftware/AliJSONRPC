@@ -64,16 +64,21 @@
 	JSONRPCMethodCall* _methodCall;
 	NSMutableData* _receivedData;
 	
-	NSObject<JSONRPCDelegate>* _delegate;
+	id<NSObject> _delegate;
 	SEL _callbackSelector;
+#if NS_BLOCKS_AVAILABLE
+	void(^_completionBlock)(JSONRPCMethodCall*,id,NSError*);
+#endif
 	
 	Class _resultClass; // instances of this class should conform to JSONInitializer
+	int _maxRetryAttempts;
+	NSTimeInterval _delayBeforeRetry;
 }
 @property(nonatomic,retain) JSONRPCMethodCall* methodCall; //!< the method call attached with this response handler
 /** @brief The delegate object on which the callback will be called.
  * @note If this delegate is nil (the default), the JSONRPCService#delegate is used instead.
  */
-@property(nonatomic,retain) NSObject<JSONRPCDelegate>* delegate;
+@property(nonatomic,retain) id<NSObject> delegate;
 /** @brief The callback (\@selector) to call when receiving the response from the WebService
  *
  * This \@selector must take three parameters:
@@ -100,7 +105,7 @@
  * @param aDelegate the delegate object that will receive the message (on which the callback will be called)
  * @param callback the \@selector to call (the message to send onto the delegate)
  */
--(void)setDelegate:(id<JSONRPCDelegate>)aDelegate callback:(SEL)callback;
+-(void)setDelegate:(id<NSObject>)aDelegate callback:(SEL)callback;
 /** @brief set both the delegate, the callback and the resultClass at once.
  * @param aDelegate the delegate object that will receive the message (on which the callback will be called)
  * @param callback the \@selector to call (the message to send onto the delegate)
@@ -109,6 +114,22 @@
  *       (JSONRPCService#callMethod or similar), as doing it that way you avoid the need to declare a temporary JSONRPCResponseHandler
  *       @code [[service callMethod:xxx] setDelegate:d callback:@selector(methodCall:didReturn:error:) resultClass:[MyCustomObject class]] @endcode
  */
--(void)setDelegate:(id<JSONRPCDelegate>)aDelegate callback:(SEL)callback resultClass:(Class)cls;
+-(void)setDelegate:(id<NSObject>)aDelegate callback:(SEL)callback resultClass:(Class)cls;
+
+#if NS_BLOCKS_AVAILABLE
+/** @brief use blocks to handle the response
+ * @param completionBlock the block to execute when done
+ */
+-(void)completion:(void(^)(JSONRPCMethodCall* methodCall,id result,NSError* error))completionBlock;
+/** @brief set the result class and use blocks to handle the response
+ * @param completionBlock the block to execute when done
+ * @param cls the Class to convert the received JSON object to before calling the completionBlock
+ */
+-(void)completion:(void(^)(JSONRPCMethodCall* methodCall,id result,NSError* error))completionBlock resultClass:(Class)cls;
+#endif
+
+@property(nonatomic, assign) int maxRetryAttempts;
+@property(nonatomic, assign) NSTimeInterval delayBeforeRetry;
+-(void)retryRequest; //!< Relaunch the request associated with this responseHandler.  You should not need to call this method yourself as this is done automatically upon network error
 @end
 

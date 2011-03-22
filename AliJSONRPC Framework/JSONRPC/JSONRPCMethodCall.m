@@ -78,7 +78,7 @@ static inline NSString* generateUUID() {
 {
 	NSMutableArray* args = [NSMutableArray array];
 	id obj;
-	while(obj = va_arg(paramsList,id)) [args addObject:obj];
+	while(nil != (obj = va_arg(paramsList,id))) [args addObject:obj];
 	return [self initWithMethodName:methodName parameters:args];
 }
 // MARK: -
@@ -105,7 +105,7 @@ static inline NSString* generateUUID() {
 	NSMutableDictionary* args = [NSMutableDictionary dictionary];
 	id obj;
 	NSString* key;
-	while(obj = va_arg(paramsList,id)) {
+	while(nil != (obj = va_arg(paramsList,id))) {
 		key = va_arg(paramsList,NSString*);
 		[args setObject:obj forKey:key];
 	}

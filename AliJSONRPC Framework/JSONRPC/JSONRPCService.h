@@ -34,11 +34,15 @@
 
 
 NSString* const JSONRPCServerErrorDomain; //!< domain for errors returned by the server (in the JSON object)
+NSString* const JSONRPCServerErrorNotification; //!< notification send for errors returned by the server (in the JSON object)
 NSString* const JSONRPCErrorJSONObjectKey; //!< key used in NSError's userInfo dict to hold JSON-RPC's error "data" member
 
-NSString* const JSONRPCInternalErrorDomain; //!< domain for internal errors: conversion from JSON to Object, ...
-NSInteger const JSONRPCConversionErrorCode; //!< The code for an NSError (JSONRPCInternalErrorDomain) that occurs when converting the JSON object to the resultClass instance
-NSString* const JSONRPCErrorClassNameKey; //!< the key used in NSError's userInfo dict to hold the class we expected to convert the JSON response to.
+NSString* const JSONRPCInternalErrorDomain;   //!< domain for internal errors: conversion from JSON to Object, ...
+NSInteger const JSONRPCFormatErrorCode;       //!< The code for an NSError (JSONRPCInternalErrorDomain) that occurs when the received JSON is not conformant with RPC standard ({id,result,error})
+NSString* const JSONRPCFormatErrorString;     //!< English string for JSONRPCFormatErrorCode error. Define a localization for "JSONRPCFormatErrorString" in your Localizable.strings to provide a custom translation
+NSInteger const JSONRPCConversionErrorCode;   //!< The code for an NSError (JSONRPCInternalErrorDomain) that occurs when converting the JSON object to the resultClass instance
+NSString* const JSONRPCConversionErrorString; //!< English string for JSONRPCConversionErrorCode error. Define a localization for "JSONRPCConversionErrorString" in your Localizable.strings to provide a custom translation
+NSString* const JSONRPCErrorClassNameKey;     //!< the key used in NSError's userInfo dict to hold the class we expected to convert the JSON response to.
 
 
 @class JSONRPCMethodCall;
@@ -66,7 +70,18 @@ NSString* const JSONRPCErrorClassNameKey; //!< the key used in NSError's userInf
  *  @param error the error that happend
  *  @return YES to continue calling this to the next error handler, NO to stop forwarding.
  */
--(BOOL)methodCall:(JSONRPCMethodCall*)methodCall didFailWithError:(NSError*)error;
+-(BOOL)methodCall:(JSONRPCMethodCall*)methodCall shouldForwardConnectionError:(NSError*)error;
+
+/** @brief Called when a network error occurred because the network has been lost, and so the request will be retried automatically soon
+ *  @param methodCall the JSONRPCMethodCall that triggered the error
+ *  @param error the error that happend
+ */
+-(void)methodCall:(JSONRPCMethodCall*)methodCall willRetryAfterError:(NSError*)error;
+
+/** @brief Called to notify when the request, that previously failed because of lost network, is being retried
+ *  @param methodCall the JSONRPCMethodCall that triggered the error 
+ */
+-(void)methodCallIsRetrying:(JSONRPCMethodCall*)methodCall;
 @end
 
 
@@ -121,11 +136,18 @@ typedef enum {
 // MARK: Calling a Procedure
 /////////////////////////////////////////////////////////////////////////////
 
-/** @brief Designed method to call a JSON-RPC method on the WebService.
+/** @brief Method to call a JSON-RPC method on the WebService.
  * @param methodCall the JSONRPCMethodCall to call
  * @return a JSONRPCResponseHandler object that allows you to define a delegate, callback and resultClass to use upon the WebService's response.
  */
 - (JSONRPCResponseHandler*)callMethod:(JSONRPCMethodCall*)methodCall;
+/** @brief Designed method to call a JSON-RPC method on the WebService.
+ * @param methodCall the JSONRPCMethodCall to call
+ * @param responseHandler the JSONRPCResponseHandler to reuse, or nil to use a new one
+ * @return a JSONRPCResponseHandler object that allows you to define a delegate, callback and resultClass to use upon the WebService's response.
+ */
+- (JSONRPCResponseHandler*)callMethod:(JSONRPCMethodCall*)methodCall reuseResponseHandler:(JSONRPCResponseHandler*)responseHandler;
+
 /** @brief Commodity method to call a JSON-RPC method on the WebService.
  * @param methodName the name of the method to call on the WebService
  * @param params the array of parameters to pass to the method call

@@ -50,7 +50,7 @@
 	JSONRPCService* s = [JSONRPCService serviceWithURL:serviceURL version:JSONRPCVersion_1_1];
 	s.delegate = self; // we are using the JSONRPCService's delegate here, not the one in JSONRPCResponseHandler.
 	//[s callMethodWithName:@"echo" namedParameters:mkDict(@"Hello",@"text")];
-	[s.proxy echo:mkDict(@"Hello",@"text")];
+	[s.proxy echo:mkDict(@"Hello",@"text")]; // Warning: No '-echo:' method found, but this is normal, it is not a real method and will be handled by the proxy object magically and transformed to a JSON-RPC call!
 	// the response will be handled in the current object (as s.delegate = self)
 	// in the "methodCall:didReturn:error:" method (as we will not override the "callback" of the JSONRPCResponseHandler,
 	// the default method defined in the JSONRPCDelegate @protocol will be called)
