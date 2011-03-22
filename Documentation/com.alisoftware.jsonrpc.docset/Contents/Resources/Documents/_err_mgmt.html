@@ -26,20 +26,20 @@
 Catching Errors</a></h2>
 <h3><a class="anchor" id="ErrCatch1">
 Internal errors</a></h3>
-<p>When an internal error occur (network error, JSON parsing error, failed to convert to expected class, ...), the <a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html" title="an intermediate object returned by the JSONRPCService when you call a method, to...">JSONRPCResponseHandler</a> will forward the error in the following order:</p>
+<p>When an internal/connection error occur (network error, JSON parsing error, failed to convert to expected class, ...), the <a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html" title="an intermediate object returned by the JSONRPCService when you call a method, to...">JSONRPCResponseHandler</a> will forward the error in the following order:</p>
 <ul>
-<li>try to call <a class="el" href="protocol_j_s_o_n_r_p_c_delegate-p.html">methodCall:didFailWithError:</a> on the <a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html" title="an intermediate object returned by the JSONRPCService when you call a method, to...">JSONRPCResponseHandler</a> 's delegate (i.e. on the object that expect to receive the response)</li>
-<li>if it does not respond, or respond and return YES, we try to call <a class="el" href="protocol_j_s_o_n_r_p_c_delegate-p.html">methodCall:didFailWithError:</a> on the <a class="el" href="interface_j_s_o_n_r_p_c_service.html" title="The class representing a JSON-RPC WebService (identified by an URL to call methods...">JSONRPCService</a> 's delegate</li>
+<li>try to call <a class="el" href="protocol_j_s_o_n_r_p_c_delegate-p.html">methodCall:shouldForwardConnectionError:</a> on the <a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html" title="an intermediate object returned by the JSONRPCService when you call a method, to...">JSONRPCResponseHandler</a> 's delegate (i.e. on the object that expect to receive the response)</li>
+<li>if it does not respond, or respond and return YES, we try to call <a class="el" href="protocol_j_s_o_n_r_p_c_delegate-p.html">methodCall:shouldForwardConnectionError:</a> on the <a class="el" href="interface_j_s_o_n_r_p_c_service.html" title="The class representing a JSON-RPC WebService (identified by an URL to call methods...">JSONRPCService</a> 's delegate</li>
 </ul>
-<p>This way, if you don't implement <a class="el" href="protocol_j_s_o_n_r_p_c_delegate-p.html">methodCall:didFailWithError:</a> in the delegate object that expect the response, it will fall back to the implementation of the JSONRPCService's delegate to handle generic cases (which typically display an alert or something).</p>
-<p>If you want to catch the error on specific cases, you still can implement <a class="el" href="protocol_j_s_o_n_r_p_c_delegate-p.html">methodCall:didFailWithError:</a> in the JSONRPCResponseHandler's delegate object to catch it. At this point, you can return YES to still execute the default behavior (the one in your JSONRPCService's delegate implementation) or return NO to avoid forwarding the error.</p>
+<p>This way, if you don't implement <a class="el" href="protocol_j_s_o_n_r_p_c_delegate-p.html">methodCall:shouldForwardConnectionError:</a> in the delegate object that expect the response, it will fall back to the implementation of the JSONRPCService's delegate to handle generic cases (which typically display an alert or something).</p>
+<p>If you want to catch the error on specific cases, you still can implement <a class="el" href="protocol_j_s_o_n_r_p_c_delegate-p.html">methodCall:shouldForwardConnectionError:</a> in the JSONRPCResponseHandler's delegate object to catch it. At this point, you can return YES to still execute the default behavior (the one in your JSONRPCService's delegate implementation) or return NO to avoid forwarding the error.</p>
 <h3><a class="anchor" id="ErrCatch2">
 Server errors</a></h3>
 <p>For error returned by the server (a JSON is received but it contains an "error" object), indicating something went wrong in the server (unknown method name, bad parameters, method-specific errors, ...), this object is simply passed as an NSError in the third parameter of the JSONRPCResponseHandler's delegate callback.</p>
 <h2><a class="anchor" id="ErrCodes">
 The different error cases and their error domains</a></h2>
 <h3><a class="anchor" id="ErrCodes1">
-Internal errors ("methodCall:didFailWithError:")</a></h3>
+Internal errors ("methodCall:shouldForwardConnectionError:")</a></h3>
 <p>This method can receive these kinds of errors:</p>
 <ul>
 <li>
@@ -57,12 +57,19 @@ key NSUnderlyingErrorKey : contains an underlying error if any </li>
 <p class="endli"></p>
 </li>
 <li>
-<p class="startli">JSON-to-Object Conversion error or internal errors (Domain JSONRPCInternalErrorDomain), whose userInfo dictionary contains the following keys:</p>
+<p class="startli">JSON-to-Object Conversion error or internal errors (Domain JSONRPCInternalErrorDomain), whose userInfo dictionary may contain the following keys:</p>
 <ul>
 <li>
-key JSONRPCErrorJSONObjectKey : the JSON object we tried to convert </li>
+key JSONRPCErrorJSONObjectKey : the JSON object we tried to convert/process </li>
 <li>
 key JSONRPCErrorClassNameKey : the name of the class we tried to convert to </li>
+</ul>
+<p>For now, the JSONRPCInternalErrorDomain domain contains two error codes :</p>
+<ul>
+<li>
+JSONRPCFormatErrorCode: this code corresponds to an unexpected JSON received by the server, especially if the returned JSON does not conforms to the JSON-RPC specification </li>
+<li>
+JSONRPCConversionErrorCode: this code correspond to an error while converting the JSON object to the resultClass provided to the <a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html" title="an intermediate object returned by the JSONRPCService when you call a method, to...">JSONRPCResponseHandler</a> </li>
 </ul>
 <p class="endli"></p>
 </li>
@@ -86,7 +93,7 @@ Server errors ("methodCall:didReturn:error:")</a></h3>
 </ul>
 </dd></dl>
 </div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Mon Jun 21 13:41:55 2010 for JSONRPC Framework by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Tue Mar 22 22:27:19 2011 for JSONRPC Framework by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

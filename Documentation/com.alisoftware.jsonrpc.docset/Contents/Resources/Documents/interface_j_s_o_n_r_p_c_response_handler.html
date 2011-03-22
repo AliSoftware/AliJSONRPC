@@ -33,33 +33,40 @@
 <p><a href="class_j_s_o_n_r_p_c_response_handler-members.html">List of all members.</a></p>
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td colspan="2"><h2>Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">(void)&nbsp;</td><td class="memItemRight" valign="bottom">- <a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html#abf6eefbd16c994ba190f612ceaf22b36">setDelegate:callback:</a></td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">set both the delegate and the callback to call upon receiving the WebService's response  <a href="#abf6eefbd16c994ba190f612ceaf22b36"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">(void)&nbsp;</td><td class="memItemRight" valign="bottom">- <a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html#a305c8ac7ca06265ed673ef97d0b12b1a">setDelegate:callback:resultClass:</a></td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">set both the delegate, the callback and the resultClass at once.  <a href="#a305c8ac7ca06265ed673ef97d0b12b1a"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">(void)&nbsp;</td><td class="memItemRight" valign="bottom">- <a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html#ab0364de6cbe7942c4c768c41f5dad20c">setDelegate:callback:</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">set both the delegate and the callback to call upon receiving the WebService's response  <a href="#ab0364de6cbe7942c4c768c41f5dad20c"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">(void)&nbsp;</td><td class="memItemRight" valign="bottom">- <a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html#a286b2cc5723f6ec0c0217079d3f2d7ac">setDelegate:callback:resultClass:</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">set both the delegate, the callback and the resultClass at once.  <a href="#a286b2cc5723f6ec0c0217079d3f2d7ac"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5a6749404db99a3e7350fabaa77e11f4"></a><!-- doxytag: member="JSONRPCResponseHandler::retryRequest" ref="a5a6749404db99a3e7350fabaa77e11f4" args="()" -->
+(void)&nbsp;</td><td class="memItemRight" valign="bottom">- <a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html#a5a6749404db99a3e7350fabaa77e11f4">retryRequest</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Relaunch the request associated with this responseHandler. You should not need to call this method yourself as this is done automatically upon network error. <br/></td></tr>
 <tr><td colspan="2"><h2>Properties</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abb42a715b3d2f2cd4c16005d3f6808bc"></a><!-- doxytag: member="JSONRPCResponseHandler::methodCall" ref="abb42a715b3d2f2cd4c16005d3f6808bc" args="" -->
 <a class="el" href="interface_j_s_o_n_r_p_c_method_call.html">JSONRPCMethodCall</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html#abb42a715b3d2f2cd4c16005d3f6808bc">methodCall</a></td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">the method call attached with this response handler <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">NSObject&lt; <a class="el" href="protocol_j_s_o_n_r_p_c_delegate-p.html">JSONRPCDelegate</a> &gt; *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html#a8b58e7b4c93462c5192f734c576334a8">delegate</a></td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">The delegate object on which the callback will be called.  <a href="#a8b58e7b4c93462c5192f734c576334a8"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">id&lt; NSObject &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html#a1ca9b9486557ec117bf0f7490eeda837">delegate</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">The delegate object on which the callback will be called.  <a href="#a1ca9b9486557ec117bf0f7490eeda837"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">SEL&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html#a502884ce24fb2b9fa9e87fbe47d1b5ae">callback</a></td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">The callback (@selector) to call when receiving the response from the WebService.  <a href="#a502884ce24fb2b9fa9e87fbe47d1b5ae"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Class&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html#a57092c0312dd5f7cd5b0e90f6940d65a">resultClass</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae04d0e5dd946a4c448c92fa7d6b1aa12"></a><!-- doxytag: member="JSONRPCResponseHandler::maxRetryAttempts" ref="ae04d0e5dd946a4c448c92fa7d6b1aa12" args="" -->
+int&nbsp;</td><td class="memItemRight" valign="bottom"><b>maxRetryAttempts</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab28e93e35d812c641e1d757f04c0a111"></a><!-- doxytag: member="JSONRPCResponseHandler::delayBeforeRetry" ref="ab28e93e35d812c641e1d757f04c0a111" args="" -->
+NSTimeInterval&nbsp;</td><td class="memItemRight" valign="bottom"><b>delayBeforeRetry</b></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
 <p>an intermediate object returned by the <a class="el" href="interface_j_s_o_n_r_p_c_service.html" title="The class representing a JSON-RPC WebService (identified by an URL to call methods...">JSONRPCService</a> when you call a method, to help you define how to handle the response. </p>
 <p><a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html" title="an intermediate object returned by the JSONRPCService when you call a method, to...">JSONRPCResponseHandler</a> is an intermediate object used to define a delegate and a callback (= a target and an action) to call when the WebService's response is received, and the Objective-C class to use if you want the received JSON object to be converted to a custom Obj-C object automatically before calling the callback.</p>
-<p>You typically don't create a <a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html" title="an intermediate object returned by the JSONRPCService when you call a method, to...">JSONRPCResponseHandler</a> yourself. Instead, you retreive such objects when calling <a class="el" href="interface_j_s_o_n_r_p_c_service.html#a73a9b9f0669b7aa99c9dbb148a009e10" title="Designed method to call a JSON-RPC method on the WebService.">callMethod: (JSONRPCService)</a> or similar methods; this returned object help you define how to handle the response returned by the WebService after the method call. </p>
+<p>You typically don't create a <a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html" title="an intermediate object returned by the JSONRPCService when you call a method, to...">JSONRPCResponseHandler</a> yourself. Instead, you retreive such objects when calling <a class="el" href="interface_j_s_o_n_r_p_c_service.html#a73a9b9f0669b7aa99c9dbb148a009e10" title="Method to call a JSON-RPC method on the WebService.">callMethod: (JSONRPCService)</a> or similar methods; this returned object help you define how to handle the response returned by the WebService after the method call. </p>
 <hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="abf6eefbd16c994ba190f612ceaf22b36"></a><!-- doxytag: member="JSONRPCResponseHandler::setDelegate:callback:" ref="abf6eefbd16c994ba190f612ceaf22b36" args="(id&lt; JSONRPCDelegate &gt; aDelegate,[callback] SEL callback)" -->
+<a class="anchor" id="ab0364de6cbe7942c4c768c41f5dad20c"></a><!-- doxytag: member="JSONRPCResponseHandler::setDelegate:callback:" ref="ab0364de6cbe7942c4c768c41f5dad20c" args="(id&lt; NSObject &gt; aDelegate,[callback] SEL callback)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">- (void) setDelegate: </td>
           <td></td>
-          <td class="paramtype">(id&lt;<a class="el" href="protocol_j_s_o_n_r_p_c_delegate-p.html">JSONRPCDelegate</a>&gt;)&nbsp;</td>
+          <td class="paramtype">(id&lt;NSObject&gt;)&nbsp;</td>
           <td class="paramname"> <em>aDelegate</em></td>
         </tr>
         <tr>
@@ -88,14 +95,14 @@
 
 </div>
 </div>
-<a class="anchor" id="a305c8ac7ca06265ed673ef97d0b12b1a"></a><!-- doxytag: member="JSONRPCResponseHandler::setDelegate:callback:resultClass:" ref="a305c8ac7ca06265ed673ef97d0b12b1a" args="(id&lt; JSONRPCDelegate &gt; aDelegate,[callback] SEL callback,[resultClass] Class cls)" -->
+<a class="anchor" id="a286b2cc5723f6ec0c0217079d3f2d7ac"></a><!-- doxytag: member="JSONRPCResponseHandler::setDelegate:callback:resultClass:" ref="a286b2cc5723f6ec0c0217079d3f2d7ac" args="(id&lt; NSObject &gt; aDelegate,[callback] SEL callback,[resultClass] Class cls)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">- (void) setDelegate: </td>
           <td></td>
-          <td class="paramtype">(id&lt;<a class="el" href="protocol_j_s_o_n_r_p_c_delegate-p.html">JSONRPCDelegate</a>&gt;)&nbsp;</td>
+          <td class="paramtype">(id&lt;NSObject&gt;)&nbsp;</td>
           <td class="paramname"> <em>aDelegate</em></td>
         </tr>
         <tr>
@@ -152,18 +159,18 @@
 <li>a parameter of type 'id' or of a specific class corresponding to the expected response returned by the WebService. If you define a resultClass on the <a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html" title="an intermediate object returned by the JSONRPCService when you call a method, to...">JSONRPCResponseHandler</a>, the type of this second argument of the @selector is typically the same class.</li>
 <li>a parameter of type NSError that will hold the error returned by the WebService if any.</li>
 </ul>
-<dl class="note"><dt><b>Note:</b></dt><dd>This method is called on the <a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html#a8b58e7b4c93462c5192f734c576334a8" title="The delegate object on which the callback will be called.">JSONRPCResponseHandler::delegate</a> object if set, or on the <a class="el" href="interface_j_s_o_n_r_p_c_service.html#ad5361d24af5c0e36868d423320f18ae1" title="Object to handle errors if not handled by JSONRPCResponseHandler::delegate .">JSONRPCService::delegate</a> if not. </dd>
+<dl class="note"><dt><b>Note:</b></dt><dd>This method is called on the <a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html#a1ca9b9486557ec117bf0f7490eeda837" title="The delegate object on which the callback will be called.">JSONRPCResponseHandler::delegate</a> object if set, or on the <a class="el" href="interface_j_s_o_n_r_p_c_service.html#ad5361d24af5c0e36868d423320f18ae1" title="Object to handle errors if not handled by JSONRPCResponseHandler::delegate .">JSONRPCService::delegate</a> if not. </dd>
 <dd>
 By default, this selector is not set (the default) and the <a class="el" href="protocol_j_s_o_n_r_p_c_delegate-p.html">JSONRPCDelegate</a> methodCall:didReturn:error: (<a class="el" href="protocol_j_s_o_n_r_p_c_delegate-p.html" title="JSONRPC Error Handler protocol, used on the JSONRPCMethodCall&#39;s or JSONRPCService&#39;s...">JSONRPCDelegate</a> @protocol) method is called instead. </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a8b58e7b4c93462c5192f734c576334a8"></a><!-- doxytag: member="JSONRPCResponseHandler::delegate" ref="a8b58e7b4c93462c5192f734c576334a8" args="" -->
+<a class="anchor" id="a1ca9b9486557ec117bf0f7490eeda837"></a><!-- doxytag: member="JSONRPCResponseHandler::delegate" ref="a1ca9b9486557ec117bf0f7490eeda837" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">- (NSObject&lt;<a class="el" href="protocol_j_s_o_n_r_p_c_delegate-p.html">JSONRPCDelegate</a>&gt;*) delegate<code> [read, write, retain]</code></td>
+          <td class="memname">- (id&lt;NSObject&gt;) delegate<code> [read, write, retain]</code></td>
         </tr>
       </table>
 </div>
@@ -190,7 +197,7 @@ By default, this selector is not set (the default) and the <a class="el" href="p
 </div>
 </div>
 </div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Mon Jun 21 13:41:55 2010 for JSONRPC Framework by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Tue Mar 22 22:27:19 2011 for JSONRPC Framework by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

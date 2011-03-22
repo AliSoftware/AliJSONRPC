@@ -37,7 +37,7 @@ Test class: a demo of using the JSONRPC Framework</a></h2>
        <a class="code" href="interface_j_s_o_n_r_p_c_service.html" title="The class representing a JSON-RPC WebService (identified by an URL to call methods...">JSONRPCService</a>* service = [[[<a class="code" href="interface_j_s_o_n_r_p_c_service.html" title="The class representing a JSON-RPC WebService (identified by an URL to call methods...">JSONRPCService</a> alloc] initWithURL:kServiceURL version:JSONRPCVersion_1_0] autorelease];
 
        [[service <a class="code" href="interface_j_s_o_n_r_p_c_service.html#ad5c6e7abfbbdfc73e32f7461677965b5" title="Commodity method to call a JSON-RPC method on the WebService.">callMethodWithNameAndParams</a>:@&quot;getUserDetails&quot;,@&quot;user1234&quot;,nil]
-        <a class="code" href="interface_j_s_o_n_r_p_c_response_handler.html#a305c8ac7ca06265ed673ef97d0b12b1a" title="set both the delegate, the callback and the resultClass at once.">setDelegate</a>:self <a class="code" href="interface_j_s_o_n_r_p_c_response_handler.html#a305c8ac7ca06265ed673ef97d0b12b1a" title="set both the delegate, the callback and the resultClass at once.">callback</a>:@selector(<a class="code" href="interface_j_s_o_n_r_p_c_response_handler.html#a305c8ac7ca06265ed673ef97d0b12b1a" title="set both the delegate, the callback and the resultClass at once.">methodCall</a>:<a class="code" href="interface_j_s_o_n_r_p_c_response_handler.html#a305c8ac7ca06265ed673ef97d0b12b1a" title="set both the delegate, the callback and the resultClass at once.">didReturnUser</a>:<a class="code" href="interface_j_s_o_n_r_p_c_response_handler.html#a305c8ac7ca06265ed673ef97d0b12b1a" title="set both the delegate, the callback and the resultClass at once.">error</a>:) <a class="code" href="interface_j_s_o_n_r_p_c_response_handler.html#a305c8ac7ca06265ed673ef97d0b12b1a" title="set both the delegate, the callback and the resultClass at once.">resultClass</a>:[Person class]];
+        <a class="code" href="interface_j_s_o_n_r_p_c_response_handler.html#a286b2cc5723f6ec0c0217079d3f2d7ac" title="set both the delegate, the callback and the resultClass at once.">setDelegate</a>:self <a class="code" href="interface_j_s_o_n_r_p_c_response_handler.html#a286b2cc5723f6ec0c0217079d3f2d7ac" title="set both the delegate, the callback and the resultClass at once.">callback</a>:@selector(<a class="code" href="interface_j_s_o_n_r_p_c_response_handler.html#a286b2cc5723f6ec0c0217079d3f2d7ac" title="set both the delegate, the callback and the resultClass at once.">methodCall</a>:<a class="code" href="interface_j_s_o_n_r_p_c_response_handler.html#a286b2cc5723f6ec0c0217079d3f2d7ac" title="set both the delegate, the callback and the resultClass at once.">didReturnUser</a>:<a class="code" href="interface_j_s_o_n_r_p_c_response_handler.html#a286b2cc5723f6ec0c0217079d3f2d7ac" title="set both the delegate, the callback and the resultClass at once.">error</a>:) <a class="code" href="interface_j_s_o_n_r_p_c_response_handler.html#a286b2cc5723f6ec0c0217079d3f2d7ac" title="set both the delegate, the callback and the resultClass at once.">resultClass</a>:[Person class]];
        <span class="comment">// will convert the returned JSON into a Person object (providing that the class Person respond to -initWithJson, this is the case below)</span>
      }
 
@@ -50,10 +50,10 @@ Test class: a demo of using the JSONRPC Framework</a></h2>
        <span class="keywordflow">if</span> (error) NSLog(<span class="stringliteral">@&quot;error in method call: %@&quot;</span>,err);
      }
 
-     -(BOOL)methodCall:(<a class="code" href="interface_j_s_o_n_r_p_c_method_call.html" title="This class represent a method call on a JSON-RPC WebService.">JSONRPCMethodCall</a>*)meth didFailWithError:(NSError*)err
+     -(BOOL)methodCall:(<a class="code" href="interface_j_s_o_n_r_p_c_method_call.html" title="This class represent a method call on a JSON-RPC WebService.">JSONRPCMethodCall</a>*)meth shouldForwardConnectionError:(NSError*)err
      {
        <span class="comment">// handle the NSError (network error / no connection, etc.)</span>
-       <span class="keywordflow">return</span> NO; <span class="comment">// don&#39;t call methodCall:didFailWithError: on the JSONRPCService&#39;s delegate.</span>
+       <span class="keywordflow">return</span> NO; <span class="comment">// don&#39;t call methodCall:shouldForwardConnectionError: on the JSONRPCService&#39;s delegate.</span>
      }
      <span class="keyword">@end</span>
 </pre></div><h2><a class="anchor" id="Example_Person">
@@ -88,7 +88,7 @@ Person class: to represent in ObjC the persons returned by the JSONRPC WebServic
      }
      <span class="keyword">@end</span>
 </pre></div> </div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Mon Jun 21 13:41:55 2010 for JSONRPC Framework by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Tue Mar 22 22:27:19 2011 for JSONRPC Framework by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

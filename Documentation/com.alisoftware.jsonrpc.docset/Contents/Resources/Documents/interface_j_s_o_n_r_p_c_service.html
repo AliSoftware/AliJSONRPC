@@ -35,7 +35,9 @@
 <tr><td colspan="2"><h2>Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">(id)&nbsp;</td><td class="memItemRight" valign="bottom">- <a class="el" href="interface_j_s_o_n_r_p_c_service.html#a9ed003e1f5fd29114c8f1c68eea81fa8">initWithURL:version:</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">(<a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html">JSONRPCResponseHandler</a> *)&nbsp;</td><td class="memItemRight" valign="bottom">- <a class="el" href="interface_j_s_o_n_r_p_c_service.html#a73a9b9f0669b7aa99c9dbb148a009e10">callMethod:</a></td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Designed method to call a JSON-RPC method on the WebService.  <a href="#a73a9b9f0669b7aa99c9dbb148a009e10"></a><br/></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Method to call a JSON-RPC method on the WebService.  <a href="#a73a9b9f0669b7aa99c9dbb148a009e10"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">(<a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html">JSONRPCResponseHandler</a> *)&nbsp;</td><td class="memItemRight" valign="bottom">- <a class="el" href="interface_j_s_o_n_r_p_c_service.html#a7ad68f96a1edb821ad2c22f8acba2844">callMethod:reuseResponseHandler:</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Designed method to call a JSON-RPC method on the WebService.  <a href="#a7ad68f96a1edb821ad2c22f8acba2844"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">(<a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html">JSONRPCResponseHandler</a> *)&nbsp;</td><td class="memItemRight" valign="bottom">- <a class="el" href="interface_j_s_o_n_r_p_c_service.html#aeb4b174af586824d86ae4c438cbb1971">callMethodWithName:parameters:</a></td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Commodity method to call a JSON-RPC method on the WebService.  <a href="#aeb4b174af586824d86ae4c438cbb1971"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">(<a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html">JSONRPCResponseHandler</a> *)&nbsp;</td><td class="memItemRight" valign="bottom">- <a class="el" href="interface_j_s_o_n_r_p_c_service.html#ad5c6e7abfbbdfc73e32f7461677965b5">callMethodWithNameAndParams:</a></td></tr>
@@ -55,7 +57,7 @@ NSURL *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="i
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">The JSON-RPC version supported by the WebService. <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad5361d24af5c0e36868d423320f18ae1"></a><!-- doxytag: member="JSONRPCService::delegate" ref="ad5361d24af5c0e36868d423320f18ae1" args="" -->
 NSObject&lt; <a class="el" href="protocol_j_s_o_n_r_p_c_delegate-p.html">JSONRPCDelegate</a> &gt; *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_j_s_o_n_r_p_c_service.html#ad5361d24af5c0e36868d423320f18ae1">delegate</a></td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Object to handle errors if not handled by <a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html#a8b58e7b4c93462c5192f734c576334a8" title="The delegate object on which the callback will be called.">JSONRPCResponseHandler::delegate</a> . <br/></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Object to handle errors if not handled by <a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html#a1ca9b9486557ec117bf0f7490eeda837" title="The delegate object on which the callback will be called.">JSONRPCResponseHandler::delegate</a> . <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a10d83b3d133196f7476d83fc12dfefe6"></a><!-- doxytag: member="JSONRPCService::proxy" ref="a10d83b3d133196f7476d83fc12dfefe6" args="" -->
 id&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_j_s_o_n_r_p_c_service.html#a10d83b3d133196f7476d83fc12dfefe6">proxy</a></td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">A proxy object on which you can call any Obj-C message (without any param or with an NSArray as a parameter), and which will be forwarded as a JSONRPC method call. <br/></td></tr>
@@ -79,10 +81,47 @@ id&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interf
 </div>
 <div class="memdoc">
 
+<p>Method to call a JSON-RPC method on the WebService. </p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>methodCall</em>&nbsp;</td><td>the <a class="el" href="interface_j_s_o_n_r_p_c_method_call.html" title="This class represent a method call on a JSON-RPC WebService.">JSONRPCMethodCall</a> to call </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>a <a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html" title="an intermediate object returned by the JSONRPCService when you call a method, to...">JSONRPCResponseHandler</a> object that allows you to define a delegate, callback and resultClass to use upon the WebService's response. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a7ad68f96a1edb821ad2c22f8acba2844"></a><!-- doxytag: member="JSONRPCService::callMethod:reuseResponseHandler:" ref="a7ad68f96a1edb821ad2c22f8acba2844" args="(JSONRPCMethodCall *methodCall,[reuseResponseHandler] JSONRPCResponseHandler *responseHandler)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">- (<a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html">JSONRPCResponseHandler</a> *) callMethod: </td>
+          <td></td>
+          <td class="paramtype">(<a class="el" href="interface_j_s_o_n_r_p_c_method_call.html">JSONRPCMethodCall</a>*)&nbsp;</td>
+          <td class="paramname"> <em>methodCall</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">reuseResponseHandler:</td>
+          <td></td>
+          <td class="paramtype">(<a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html">JSONRPCResponseHandler</a>*)&nbsp;</td>
+          <td class="paramname"> <em>responseHandler</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
 <p>Designed method to call a JSON-RPC method on the WebService. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>methodCall</em>&nbsp;</td><td>the <a class="el" href="interface_j_s_o_n_r_p_c_method_call.html" title="This class represent a method call on a JSON-RPC WebService.">JSONRPCMethodCall</a> to call </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>responseHandler</em>&nbsp;</td><td>the <a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html" title="an intermediate object returned by the JSONRPCService when you call a method, to...">JSONRPCResponseHandler</a> to reuse, or nil to use a new one </td></tr>
   </table>
   </dd>
 </dl>
@@ -309,7 +348,7 @@ id&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interf
 </div>
 </div>
 </div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Mon Jun 21 13:41:55 2010 for JSONRPC Framework by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Tue Mar 22 22:27:19 2011 for JSONRPC Framework by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

@@ -38,6 +38,9 @@
 <li>callMethod:
 : <a class="el" href="interface_j_s_o_n_r_p_c_service.html#a73a9b9f0669b7aa99c9dbb148a009e10">JSONRPCService</a>
 </li>
+<li>callMethod:reuseResponseHandler:
+: <a class="el" href="interface_j_s_o_n_r_p_c_service.html#a7ad68f96a1edb821ad2c22f8acba2844">JSONRPCService</a>
+</li>
 <li>callMethodWithName:namedParameters:
 : <a class="el" href="interface_j_s_o_n_r_p_c_service.html#adc3b8677f9e524e8028b99196f7c96a7">JSONRPCService</a>
 </li>
@@ -71,11 +74,17 @@
 <li>initWithURL:version:
 : <a class="el" href="interface_j_s_o_n_r_p_c_service.html#a9ed003e1f5fd29114c8f1c68eea81fa8">JSONRPCService</a>
 </li>
-<li>methodCall:didFailWithError:
-: <a class="el" href="protocol_j_s_o_n_r_p_c_delegate-p.html#ace99db762476752e5c305cf36142ebec">&lt;JSONRPCDelegate&gt;</a>
-</li>
 <li>methodCall:didReturn:error:
 : <a class="el" href="protocol_j_s_o_n_r_p_c_delegate-p.html#afd00e2beb879f47fb255ce80cfe3ab4d">&lt;JSONRPCDelegate&gt;</a>
+</li>
+<li>methodCall:shouldForwardConnectionError:
+: <a class="el" href="protocol_j_s_o_n_r_p_c_delegate-p.html#a20aee65699cd73d80525761c8204eebc">&lt;JSONRPCDelegate&gt;</a>
+</li>
+<li>methodCall:willRetryAfterError:
+: <a class="el" href="protocol_j_s_o_n_r_p_c_delegate-p.html#ad572b13f84b3066adc9fce0e795e774e">&lt;JSONRPCDelegate&gt;</a>
+</li>
+<li>methodCallIsRetrying:
+: <a class="el" href="protocol_j_s_o_n_r_p_c_delegate-p.html#a6d993652c7756ea4813497599578a6de">&lt;JSONRPCDelegate&gt;</a>
 </li>
 <li>methodCallWithMethodName:namedParameters:
 : <a class="el" href="interface_j_s_o_n_r_p_c_method_call.html#a947bae7ffe0bc1343f7a06c1b3742063">JSONRPCMethodCall</a>
@@ -92,18 +101,21 @@
 <li>proxyForJson
 : <a class="el" href="interface_j_s_o_n_r_p_c_method_call.html#ac683a4417ca3de1d3683044bdee45edb">JSONRPCMethodCall</a>
 </li>
+<li>retryRequest
+: <a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html#a5a6749404db99a3e7350fabaa77e11f4">JSONRPCResponseHandler</a>
+</li>
 <li>serviceWithURL:version:
 : <a class="el" href="interface_j_s_o_n_r_p_c_service.html#afb2dad7edcc69c2932513fe8788001eb">JSONRPCService</a>
 </li>
 <li>setDelegate:callback:
-: <a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html#abf6eefbd16c994ba190f612ceaf22b36">JSONRPCResponseHandler</a>
+: <a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html#ab0364de6cbe7942c4c768c41f5dad20c">JSONRPCResponseHandler</a>
 </li>
 <li>setDelegate:callback:resultClass:
-: <a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html#a305c8ac7ca06265ed673ef97d0b12b1a">JSONRPCResponseHandler</a>
+: <a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html#a286b2cc5723f6ec0c0217079d3f2d7ac">JSONRPCResponseHandler</a>
 </li>
 </ul>
 </div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Mon Jun 21 13:41:55 2010 for JSONRPC Framework by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Tue Mar 22 22:27:19 2011 for JSONRPC Framework by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

@@ -49,15 +49,27 @@
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abeb906f5e46f806ba6735dfddfb83010"></a><!-- doxytag: member="JSONRPCService.h::JSONRPCServerErrorDomain" ref="abeb906f5e46f806ba6735dfddfb83010" args="" -->
 NSString *const&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="_j_s_o_n_r_p_c_service_8h.html#abeb906f5e46f806ba6735dfddfb83010">JSONRPCServerErrorDomain</a></td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">domain for errors returned by the server (in the JSON object) <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a018e28ae5d4ceb22db13fa1198dba619"></a><!-- doxytag: member="JSONRPCService.h::JSONRPCServerErrorNotification" ref="a018e28ae5d4ceb22db13fa1198dba619" args="" -->
+NSString *const&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="_j_s_o_n_r_p_c_service_8h.html#a018e28ae5d4ceb22db13fa1198dba619">JSONRPCServerErrorNotification</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">notification send for errors returned by the server (in the JSON object) <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa37eed3531b525b49a35792455a9bdeb"></a><!-- doxytag: member="JSONRPCService.h::JSONRPCErrorJSONObjectKey" ref="aa37eed3531b525b49a35792455a9bdeb" args="" -->
 NSString *const&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="_j_s_o_n_r_p_c_service_8h.html#aa37eed3531b525b49a35792455a9bdeb">JSONRPCErrorJSONObjectKey</a></td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">key used in NSError's userInfo dict to hold JSON-RPC's error "data" member <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab5f3ce0224387238e0cdeb6c1833c056"></a><!-- doxytag: member="JSONRPCService.h::JSONRPCInternalErrorDomain" ref="ab5f3ce0224387238e0cdeb6c1833c056" args="" -->
 NSString *const&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="_j_s_o_n_r_p_c_service_8h.html#ab5f3ce0224387238e0cdeb6c1833c056">JSONRPCInternalErrorDomain</a></td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">domain for internal errors: conversion from JSON to Object, ... <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a46b682c568e62e0d4e9b90d34e327691"></a><!-- doxytag: member="JSONRPCService.h::JSONRPCFormatErrorCode" ref="a46b682c568e62e0d4e9b90d34e327691" args="" -->
+NSInteger const&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="_j_s_o_n_r_p_c_service_8h.html#a46b682c568e62e0d4e9b90d34e327691">JSONRPCFormatErrorCode</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">The code for an NSError (JSONRPCInternalErrorDomain) that occurs when the received JSON is not conformant with RPC standard ({id,result,error}). <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8b5f8cd307dbfe136709d098ad9a725b"></a><!-- doxytag: member="JSONRPCService.h::JSONRPCFormatErrorString" ref="a8b5f8cd307dbfe136709d098ad9a725b" args="" -->
+NSString *const&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="_j_s_o_n_r_p_c_service_8h.html#a8b5f8cd307dbfe136709d098ad9a725b">JSONRPCFormatErrorString</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">English string for JSONRPCFormatErrorCode error. Define a localization for "JSONRPCFormatErrorString" in your Localizable.strings to provide a custom translation. <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1d0bba0870c1f5d5b20cc2dac3a40c8a"></a><!-- doxytag: member="JSONRPCService.h::JSONRPCConversionErrorCode" ref="a1d0bba0870c1f5d5b20cc2dac3a40c8a" args="" -->
 NSInteger const&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="_j_s_o_n_r_p_c_service_8h.html#a1d0bba0870c1f5d5b20cc2dac3a40c8a">JSONRPCConversionErrorCode</a></td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">The code for an NSError (JSONRPCInternalErrorDomain) that occurs when converting the JSON object to the resultClass instance. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae25c85f424505c99599564a0ce16b77a"></a><!-- doxytag: member="JSONRPCService.h::JSONRPCConversionErrorString" ref="ae25c85f424505c99599564a0ce16b77a" args="" -->
+NSString *const&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="_j_s_o_n_r_p_c_service_8h.html#ae25c85f424505c99599564a0ce16b77a">JSONRPCConversionErrorString</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">English string for JSONRPCConversionErrorCode error. Define a localization for "JSONRPCConversionErrorString" in your Localizable.strings to provide a custom translation. <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad139f904d7814ef48ad19784d8a0d11c"></a><!-- doxytag: member="JSONRPCService.h::JSONRPCErrorClassNameKey" ref="ad139f904d7814ef48ad19784d8a0d11c" args="" -->
 NSString *const&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="_j_s_o_n_r_p_c_service_8h.html#ad139f904d7814ef48ad19784d8a0d11c">JSONRPCErrorClassNameKey</a></td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">the key used in NSError's userInfo dict to hold the class we expected to convert the JSON response to. <br/></td></tr>
@@ -65,7 +77,7 @@ NSString *const&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el"
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
 <p>Represent a JSON-RPC WebService. </p>
 </div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Mon Jun 21 13:41:55 2010 for JSONRPC Framework by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Tue Mar 22 22:27:19 2011 for JSONRPC Framework by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

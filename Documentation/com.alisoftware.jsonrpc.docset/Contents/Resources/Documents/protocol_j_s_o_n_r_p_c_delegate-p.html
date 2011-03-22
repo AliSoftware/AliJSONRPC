@@ -35,49 +35,16 @@
 <tr><td colspan="2"><h2>Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">(void)&nbsp;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_j_s_o_n_r_p_c_delegate-p.html#afd00e2beb879f47fb255ce80cfe3ab4d">methodCall:didReturn:error:</a></td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">method called upon reception of the result of a JSON-RPC method call, if no callback defined in the returned <a class="el" href="interface_j_s_o_n_r_p_c_response_handler.html" title="an intermediate object returned by the JSONRPCService when you call a method, to...">JSONRPCResponseHandler</a> to catch the response.  <a href="#afd00e2beb879f47fb255ce80cfe3ab4d"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">(BOOL)&nbsp;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_j_s_o_n_r_p_c_delegate-p.html#ace99db762476752e5c305cf36142ebec">methodCall:didFailWithError:</a></td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Called when an error occurred during the method call. (see <a class="el" href="_err_mgmt.html">Error management</a>).  <a href="#ace99db762476752e5c305cf36142ebec"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">(BOOL)&nbsp;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_j_s_o_n_r_p_c_delegate-p.html#a20aee65699cd73d80525761c8204eebc">methodCall:shouldForwardConnectionError:</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Called when an error occurred during the method call. (see <a class="el" href="_err_mgmt.html">Error management</a>).  <a href="#a20aee65699cd73d80525761c8204eebc"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">(void)&nbsp;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_j_s_o_n_r_p_c_delegate-p.html#ad572b13f84b3066adc9fce0e795e774e">methodCall:willRetryAfterError:</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Called when a network error occurred because the network has been lost, and so the request will be retried automatically soon.  <a href="#ad572b13f84b3066adc9fce0e795e774e"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">(void)&nbsp;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_j_s_o_n_r_p_c_delegate-p.html#a6d993652c7756ea4813497599578a6de">methodCallIsRetrying:</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Called to notify when the request, that previously failed because of lost network, is being retried.  <a href="#a6d993652c7756ea4813497599578a6de"></a><br/></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
 <p>JSONRPC Error Handler protocol, used on the JSONRPCMethodCall's or JSONRPCService's delegate (see <a class="el" href="_err_mgmt.html">Error management</a>). </p>
 <hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="ace99db762476752e5c305cf36142ebec"></a><!-- doxytag: member="JSONRPCDelegate&#45;p::methodCall:didFailWithError:" ref="ace99db762476752e5c305cf36142ebec" args="(JSONRPCMethodCall *methodCall,[didFailWithError] NSError *error)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">- (BOOL) methodCall: </td>
-          <td></td>
-          <td class="paramtype">(<a class="el" href="interface_j_s_o_n_r_p_c_method_call.html">JSONRPCMethodCall</a> *)&nbsp;</td>
-          <td class="paramname"> <em>methodCall</em></td>
-        </tr>
-        <tr>
-          <td class="paramkey">didFailWithError:</td>
-          <td></td>
-          <td class="paramtype">(NSError *)&nbsp;</td>
-          <td class="paramname"> <em>error</em></td><td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td></td><td></td><td><code> [optional]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Called when an error occurred during the method call. (see <a class="el" href="_err_mgmt.html">Error management</a>). </p>
-<dl><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>methodCall</em>&nbsp;</td><td>the <a class="el" href="interface_j_s_o_n_r_p_c_method_call.html" title="This class represent a method call on a JSON-RPC WebService.">JSONRPCMethodCall</a> that triggered the error </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>error</em>&nbsp;</td><td>the error that happend </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd>YES to continue calling this to the next error handler, NO to stop forwarding. </dd></dl>
-
-</div>
-</div>
 <a class="anchor" id="afd00e2beb879f47fb255ce80cfe3ab4d"></a><!-- doxytag: member="JSONRPCDelegate&#45;p::methodCall:didReturn:error:" ref="afd00e2beb879f47fb255ce80cfe3ab4d" args="(JSONRPCMethodCall *methodCall,[didReturn] id result,[error] NSError *error)" -->
 <div class="memitem">
 <div class="memproto">
@@ -121,8 +88,107 @@
 
 </div>
 </div>
+<a class="anchor" id="a20aee65699cd73d80525761c8204eebc"></a><!-- doxytag: member="JSONRPCDelegate&#45;p::methodCall:shouldForwardConnectionError:" ref="a20aee65699cd73d80525761c8204eebc" args="(JSONRPCMethodCall *methodCall,[shouldForwardConnectionError] NSError *error)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">- (BOOL) methodCall: </td>
+          <td></td>
+          <td class="paramtype">(<a class="el" href="interface_j_s_o_n_r_p_c_method_call.html">JSONRPCMethodCall</a> *)&nbsp;</td>
+          <td class="paramname"> <em>methodCall</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">shouldForwardConnectionError:</td>
+          <td></td>
+          <td class="paramtype">(NSError *)&nbsp;</td>
+          <td class="paramname"> <em>error</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td><td></td><td><code> [optional]</code></td>
+        </tr>
+      </table>
 </div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Mon Jun 21 13:41:55 2010 for JSONRPC Framework by&nbsp;
+<div class="memdoc">
+
+<p>Called when an error occurred during the method call. (see <a class="el" href="_err_mgmt.html">Error management</a>). </p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>methodCall</em>&nbsp;</td><td>the <a class="el" href="interface_j_s_o_n_r_p_c_method_call.html" title="This class represent a method call on a JSON-RPC WebService.">JSONRPCMethodCall</a> that triggered the error </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>error</em>&nbsp;</td><td>the error that happend </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>YES to continue calling this to the next error handler, NO to stop forwarding. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ad572b13f84b3066adc9fce0e795e774e"></a><!-- doxytag: member="JSONRPCDelegate&#45;p::methodCall:willRetryAfterError:" ref="ad572b13f84b3066adc9fce0e795e774e" args="(JSONRPCMethodCall *methodCall,[willRetryAfterError] NSError *error)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">- (void) methodCall: </td>
+          <td></td>
+          <td class="paramtype">(<a class="el" href="interface_j_s_o_n_r_p_c_method_call.html">JSONRPCMethodCall</a> *)&nbsp;</td>
+          <td class="paramname"> <em>methodCall</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">willRetryAfterError:</td>
+          <td></td>
+          <td class="paramtype">(NSError *)&nbsp;</td>
+          <td class="paramname"> <em>error</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td><td></td><td><code> [optional]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Called when a network error occurred because the network has been lost, and so the request will be retried automatically soon. </p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>methodCall</em>&nbsp;</td><td>the <a class="el" href="interface_j_s_o_n_r_p_c_method_call.html" title="This class represent a method call on a JSON-RPC WebService.">JSONRPCMethodCall</a> that triggered the error </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>error</em>&nbsp;</td><td>the error that happend </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a6d993652c7756ea4813497599578a6de"></a><!-- doxytag: member="JSONRPCDelegate&#45;p::methodCallIsRetrying:" ref="a6d993652c7756ea4813497599578a6de" args="(JSONRPCMethodCall *methodCall)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">- (void) methodCallIsRetrying: </td>
+          <td></td>
+          <td class="paramtype">(<a class="el" href="interface_j_s_o_n_r_p_c_method_call.html">JSONRPCMethodCall</a> *)&nbsp;</td>
+          <td class="paramname"> <em>methodCall</em></td>
+          <td>&nbsp;</td>
+          <td><code> [optional]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Called to notify when the request, that previously failed because of lost network, is being retried. </p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>methodCall</em>&nbsp;</td><td>the <a class="el" href="interface_j_s_o_n_r_p_c_method_call.html" title="This class represent a method call on a JSON-RPC WebService.">JSONRPCMethodCall</a> that triggered the error </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+</div>
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Tue Mar 22 22:27:19 2011 for JSONRPC Framework by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>
